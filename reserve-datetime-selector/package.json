@@ -10,7 +10,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc && vite build",
+    "prePublish": "npm run lint && npm run build && npm run moveFiles",
+    "build": "vite build --emptyOutDir",
+    "moveFiles": "yes | cp dist/content.js entrypoint && yes | cp static/* entrypoint",
+    "lint": "tsc",
     "format": "prettier . --write"
   },
   "keywords": [],
