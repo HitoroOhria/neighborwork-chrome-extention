@@ -1,0 +1,12 @@
+.vertical-container {
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  /*
+    not working 🤔
+    The flex-wrap: nowrap property prevents align-content from having an effect.
+    Try setting flex-wrap to something other than nowrap.
+  */
+  align-content: center;
+  gap: 10px;
+}

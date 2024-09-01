@@ -12,7 +12,7 @@
   "scripts": {
     "prePublish": "npm run lint && npm run build && npm run moveFiles",
     "build": "vite build --emptyOutDir",
-    "moveFiles": "yes | cp dist/content.js entrypoint && yes | cp static/* entrypoint",
+    "moveFiles": "rm -rf entrypoint/* && yes | cp dist/content.js entrypoint && yes | cp static/* entrypoint",
     "lint": "tsc",
     "format": "prettier . --write"
   },

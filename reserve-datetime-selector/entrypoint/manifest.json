@@ -1,0 +1,17 @@
+{
+  "name": "NEIGHBORWORK Time Selector",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "description": "NEIGHBORWORK Time Selector Chrome Extension",
+  "content_scripts": [
+    {
+      "matches": ["https://sycl.neighborwork.jp/reserve_booth/*"],
+      "js": ["content.js"],
+      "css": [
+        "time-select.css",
+        "reservation-button.css",
+        "vertical-container.css"
+      ]
+    }
+  ]
+}
