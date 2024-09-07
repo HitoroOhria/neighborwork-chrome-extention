@@ -6,8 +6,10 @@ import { createRoot } from "react-dom/client";
 import ReservationTBody from "./component/TimeSelector/ReservationTBody";
 import CalendarSelector from "./component/CalendarSelector/CalendarSelector";
 
-makeOrigTableHidden();
-insertReactDom();
+window.onload = function () {
+  makeOrigTableHidden();
+  insertReactDom();
+};
 
 function insertReactDom() {
   const app = document.createElement("div");
