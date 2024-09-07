@@ -6,6 +6,7 @@ type ReservationGridTableProps = {
   onDragStart: (rowNum: number, colNum: number) => void;
   onDragOver: (rowNum: number, colNum: number) => void;
   onDragEnd: () => void;
+  onClick: (rowNum: number, colNum: number) => void;
 };
 
 export default function ReservationGridTable({
@@ -14,6 +15,7 @@ export default function ReservationGridTable({
   onDragStart,
   onDragOver,
   onDragEnd,
+  onClick,
 }: ReservationGridTableProps) {
   return Array(row)
     .fill(null)
@@ -27,6 +29,7 @@ export default function ReservationGridTable({
             onDragStart={onDragStart}
             onDragOver={onDragOver}
             onDragEnd={onDragEnd}
+            onClick={onClick}
           />
         )),
     );

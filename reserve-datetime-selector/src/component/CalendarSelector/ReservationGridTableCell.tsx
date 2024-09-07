@@ -7,6 +7,7 @@ type ReservationGridTableCellProps = {
   onDragStart: (rowNum: number, colNum: number) => void;
   onDragOver: (rowNum: number, colNum: number) => void;
   onDragEnd: () => void;
+  onClick: (rowNum: number, colNum: number) => void;
 };
 
 export default function ReservationGridTableCell({
@@ -15,6 +16,7 @@ export default function ReservationGridTableCell({
   onDragStart,
   onDragOver,
   onDragEnd,
+  onClick,
 }: ReservationGridTableCellProps) {
   const [cursor, setCursor] = useState<CSSProperties["cursor"]>("pointer");
 
@@ -54,6 +56,10 @@ export default function ReservationGridTableCell({
     onDragEnd();
   }
 
+  function handleClick() {
+    onClick(rowNum, colNum);
+  }
+
   return (
     <div
       style={{ cursor, gridRow: rowNum, gridColumn: colNum }}
@@ -61,6 +67,7 @@ export default function ReservationGridTableCell({
       onDragStart={handleDragStart}
       onDragEnter={handleDragEnter}
       onDragEnd={handleDragEnd}
+      onClick={handleClick}
     />
   );
 }
