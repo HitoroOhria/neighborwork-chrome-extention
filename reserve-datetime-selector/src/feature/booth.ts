@@ -20,3 +20,7 @@ export const booths: Booth[] = [
 ];
 
 export const allBoothIds = booths.map((booth) => booth.id);
+
+export function useBooth() {
+  return { booths, allBoothIds };
+}

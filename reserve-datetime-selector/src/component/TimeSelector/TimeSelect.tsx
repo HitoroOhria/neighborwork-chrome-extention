@@ -1,4 +1,4 @@
-import { boothCellValues } from "../../model/BoothCellValues";
+import { useBoothCellValues } from "../../model/BoothCellValues";
 import { ChangeEvent, useMemo, useState } from "react";
 
 type TimeSelectProps = {
@@ -6,6 +6,7 @@ type TimeSelectProps = {
 };
 
 export default function TimeSelect({ boothId }: TimeSelectProps) {
+  const { boothCellValues } = useBoothCellValues();
   const [reservationUrl, setReservationUrl] = useState<string | undefined>(
     boothCellValues.getMinimumTimeReservationUrl(boothId),
   );

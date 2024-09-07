@@ -122,3 +122,7 @@ export class BoothCellValues {
 }
 
 export const boothCellValues = new BoothCellValues(origTableElement);
+
+export function useBoothCellValues() {
+  return { boothCellValues };
+}

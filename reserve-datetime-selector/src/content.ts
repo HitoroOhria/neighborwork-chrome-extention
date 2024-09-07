@@ -1,4 +1,3 @@
-import { booths } from "./feature/booth";
 import {
   appendElementToTableAfter,
   makeOrigTableHidden,
@@ -17,5 +16,5 @@ function insertReactDom() {
 
   const root = createRoot(document.getElementById("app") as HTMLElement);
   // root.render(ReservationTBody({ booths }));
-  root.render(CalendarSelector({ booths }));
+  root.render(CalendarSelector());
 }

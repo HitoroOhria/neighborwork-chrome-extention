@@ -1,13 +1,19 @@
 import ReservationGridReservationArea, {
   ReservationGridReservationAreaProps,
 } from "./ReservationGridReservationArea";
-import { BoothCellValues, boothCellValues } from "../../model/BoothCellValues";
-import { allBoothIds, Booth, booths } from "../../feature/booth";
+import {
+  BoothCellValues,
+  useBoothCellValues,
+} from "../../model/BoothCellValues";
+import { Booth, useBooth } from "../../feature/booth";
 import { useMemo } from "react";
 
 type ReservationGridReservedAreasProps = {};
 
 export default function ReservationGridReservedAreas({}: ReservationGridReservedAreasProps) {
+  const { allBoothIds, booths } = useBooth();
+  const { boothCellValues } = useBoothCellValues();
+
   const reservedAreasProps = useMemo(
     () => getReservedAreasProps(allBoothIds, booths, boothCellValues),
     [allBoothIds, booths, boothCellValues],

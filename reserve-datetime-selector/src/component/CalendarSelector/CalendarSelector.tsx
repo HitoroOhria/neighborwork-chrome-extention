@@ -1,4 +1,4 @@
-import { Booth } from "../../feature/booth";
+import { Booth, useBooth } from "../../feature/booth";
 import { headerColStyle } from "../../feature/headerColStyle";
 import HeaderArea from "./HeaderArea";
 import TimeArea, { timeAreaWidth } from "./TimeArea";
@@ -13,11 +13,9 @@ export const areaName = {
   reservation: "reservationArea",
 };
 
-type CalendarSelectorProps = {
-  booths: Booth[];
-};
+export default function CalendarSelector() {
+  const { booths } = useBooth();
 
-export default function CalendarSelector({ booths }: CalendarSelectorProps) {
   const reservationRow = dayMinutes / minimumReservationDuration;
   const reservationCol = booths.length;
 
