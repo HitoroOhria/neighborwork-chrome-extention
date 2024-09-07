@@ -3,6 +3,7 @@ import {
   boothAId,
   boothPId,
   boothRId,
+  booths,
   boothSunId,
   boothTId,
   boothYId,
@@ -93,20 +94,6 @@ export class BoothCellValues {
     return reservableCellValues[0].reservationUrl;
   }
 
-  public getReservableBoothCellValueAsNull(): Record<
-    string,
-    Array<BoothCellValue | null>
-  > {
-    const resp: Record<string, Array<BoothCellValue | null>> = {};
-    Object.entries(this.data).forEach(([key, cellValues]) => {
-      resp[key] = cellValues.map((value) =>
-        value.canReserve() ? null : value,
-      );
-    });
-
-    return resp;
-  }
-
   // ブース ID と時間帯からセルを検索する
   public findCellValue(arg: {
     boothId: string;
@@ -114,6 +101,19 @@ export class BoothCellValues {
   }): BoothCellValue | undefined {
     const cellValues = this.data[arg.boothId];
     return cellValues.find((cellValue) => cellValue.time === arg.time);
+  }
+
+  public findCellValueByCellNum(arg: {
+    rowNum: number;
+    colNum: number;
+  }): BoothCellValue | undefined {
+    const booth = booths.at(arg.colNum - 1);
+    if (booth === undefined) {
+      return undefined;
+    }
+
+    const cellValues = this.data[booth.id];
+    return cellValues[arg.rowNum - 1];
   }
 
   public getCellValues(boothId: string): BoothCellValue[] {

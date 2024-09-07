@@ -1,4 +1,4 @@
-import { CSSProperties, DragEvent, useState } from "react";
+import {CSSProperties, DragEvent, useEffect, useState} from "react";
 import { useBoothCellValues } from "../../model/BoothCellValues";
 import { useBooth } from "../../feature/booth";
 import { minimumReservationDuration } from "./CalendarSelector";
@@ -23,6 +23,14 @@ export default function ReservationGridTableCell({
 
   const { booths } = useBooth();
   const { boothCellValues } = useBoothCellValues();
+
+  const cellValue = boothCellValues.findCellValueByCellNum({ rowNum, colNum });
+
+  useEffect(() => {
+    if (cellValue?.reserved()) {
+      setCursor("default");
+    }
+  }, [cellValue]);
 
   function disableDragPreview(e: DragEvent<HTMLDivElement>) {
     const img = new Image();
