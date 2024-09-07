@@ -2,7 +2,11 @@ const tableParentElement = document.getElementById("mix-anchor")!;
 
 export const origTableElement = tableParentElement
   .childNodes[1] as HTMLTableElement;
-export const origTbodyElement = origTableElement.childNodes[3] as HTMLElement;
+const origTbodyElement = origTableElement.childNodes[3] as HTMLElement;
+
+export const appendElementToTableAfter = (el: HTMLElement | string) => {
+  origTbodyElement.after(el);
+};
 
 export const makeOrigTableHidden = () => {
   origTbodyElement.style.display = "none";
@@ -10,8 +14,4 @@ export const makeOrigTableHidden = () => {
 
 export const makeOrigTableDisplay = () => {
   origTbodyElement.style.display = "table-row-group";
-};
-
-export const appendElementToTableAfter = (el: HTMLElement) => {
-  origTbodyElement.after(el);
 };

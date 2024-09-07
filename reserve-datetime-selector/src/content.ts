@@ -1,32 +1,19 @@
-import { createTimeSelector } from "./timeSelect";
-import { allBoothIds } from "./booth";
-import { createReservationButtonElement } from "./reservationButton";
-import { boothCellValues } from "./boothCellValues";
-import { createNewTbodyElement } from "./new_table";
-import { appendElementToTableAfter, makeOrigTableHidden } from "./orig_table";
+import { booths } from "./feature/booth";
+import {
+  appendElementToTableAfter,
+  makeOrigTableHidden,
+} from "./feature/orig_table";
+import { createRoot } from "react-dom/client";
+import ReservationTBody from "./component/ReservationTBody";
 
-console.log("hello!!");
+makeOrigTableHidden();
+insertReactDom();
 
-window.onload = () => {
-  const containers = allBoothIds.map((boothId) => {
-    const timeSelector = createTimeSelector(boothId);
-    const href = boothCellValues.getMinimumTimeReservationUrl(boothId) ?? "";
-    const reservationButton = createReservationButtonElement({ boothId, href });
+function insertReactDom() {
+  const app = document.createElement("div");
+  app.innerHTML = '<div id="app"></div>';
+  appendElementToTableAfter(app);
 
-    return createVerticalContainer(timeSelector, reservationButton);
-  });
-
-  makeOrigTableHidden();
-  const newTbody = createNewTbodyElement(containers);
-  appendElementToTableAfter(newTbody);
-};
-
-const createVerticalContainer = (
-  ...children: HTMLElement[]
-): HTMLDivElement => {
-  const div = document.createElement("div");
-  div.className = "vertical-container";
-  children.forEach((child) => div.appendChild(child));
-
-  return div;
-};
+  const root = createRoot(document.getElementById("app") as HTMLElement);
+  root.render(ReservationTBody({ booths }));
+}

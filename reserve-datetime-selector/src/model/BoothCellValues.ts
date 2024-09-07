@@ -6,9 +6,9 @@ import {
   boothSunId,
   boothTId,
   boothYId,
-} from "./booth";
+} from "../feature/booth";
 import { BoothCellValue } from "./BoothCellValue";
-import { origTableElement } from "./orig_table";
+import { origTableElement } from "../feature/orig_table";
 
 type CellIndex = { time: number; reservable: number };
 type CellIndexPerBooth = Record<string, CellIndex>;
