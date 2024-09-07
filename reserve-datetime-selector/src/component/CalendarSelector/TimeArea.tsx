@@ -43,7 +43,7 @@ export default function TimeArea({ startTime, reservationRow }: TimeAreaProps) {
               <div
                 style={{ color: "#c4c4c4", position: "relative", top: "-10px" }}
               >
-                {idx === 0 && idx % 2 === 1 ? "" : formatToTimeString(time)}
+                {idx === 0 || idx % 2 === 1 ? "" : formatToTimeString(time)}
               </div>
               <div
                 style={{
