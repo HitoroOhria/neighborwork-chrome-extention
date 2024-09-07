@@ -1,4 +1,4 @@
-import { areaName } from "./CalendarSelector";
+import { areaName, minimumReservationDuration } from "./CalendarSelector";
 import ReservationGridLattice from "./ReservationGridLattice";
 import ReservationGridTable from "./ReservationGridTable";
 import ReservationGridReservationArea, {
@@ -6,6 +6,7 @@ import ReservationGridReservationArea, {
 } from "./ReservationGridReservationArea";
 import { useState } from "react";
 import ReservationGridReservedAreas from "./ReservationGridReservedAreas";
+import { clickBookingFormButton } from "../../feature/bookingFrom";
 
 export const reservationCellHeight = "22px";
 
@@ -15,28 +16,38 @@ type ReservationProps = {
 };
 
 export default function ReservationArea({ row, col }: ReservationProps) {
-  const [startReservationAreaPosition, setStartReservationAreaPosition] =
-    useState<GridPosition | undefined>(undefined);
-  const [endReservationAreaPosition, setEndReservationAreaPosition] = useState<
+  const [startRAreaPosition, setStartRAreaPosition] = useState<
+    GridPosition | undefined
+  >(undefined);
+  const [endRAreaPosition, setEndRAreaPosition] = useState<
     GridPosition | undefined
   >(undefined);
 
   function handleTableCellDragging(rowNum: number, colNum: number) {
     // 最初のドラッグ要素であれば、そのまま値をセットする
-    if (startReservationAreaPosition === undefined) {
-      setStartReservationAreaPosition({ rowNum, colNum });
+    if (startRAreaPosition === undefined) {
+      setStartRAreaPosition({ rowNum, colNum });
       return;
     }
 
     // 既にドラッグ済みの要素と異なる列にはウィンドウを広げない
-    if (startReservationAreaPosition.colNum !== colNum) {
+    if (startRAreaPosition.colNum !== colNum) {
       return;
     }
 
-    setEndReservationAreaPosition({ rowNum, colNum });
+    setEndRAreaPosition({ rowNum, colNum });
   }
 
-  function handleTableCellDragEnd() {}
+  async function handleTableCellDragEnd(reservationUrl: string) {
+    if (startRAreaPosition === undefined || endRAreaPosition === undefined) {
+      return;
+    }
+
+    const duration =
+      (endRAreaPosition.rowNum - startRAreaPosition.rowNum + 1) *
+      minimumReservationDuration;
+    await clickBookingFormButton(reservationUrl, duration);
+  }
 
   return (
     <div style={{ gridArea: areaName.reservation }}>
@@ -58,8 +69,8 @@ export default function ReservationArea({ row, col }: ReservationProps) {
         <ReservationGridReservedAreas />
         <ReservationGridReservationArea
           variant={"reservation"}
-          startGridPosition={startReservationAreaPosition}
-          endGridPosition={endReservationAreaPosition}
+          startGridPosition={startRAreaPosition}
+          endGridPosition={endRAreaPosition}
         />
       </div>
     </div>

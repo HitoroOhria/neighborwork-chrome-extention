@@ -1,15 +1,12 @@
-import {CSSProperties, DragEvent, useEffect, useState} from "react";
+import { CSSProperties, DragEvent, useEffect, useState } from "react";
 import { useBoothCellValues } from "../../model/BoothCellValues";
-import { useBooth } from "../../feature/booth";
-import { minimumReservationDuration } from "./CalendarSelector";
-import { formatToTimeString } from "../../feature/time";
 
 type ReservationGridTableCellProps = {
   rowNum: number;
   colNum: number;
   onDragStart: (rowNum: number, colNum: number) => void;
   onDragOver: (rowNum: number, colNum: number) => void;
-  onDragEnd: () => void;
+  onDragEnd: (reservationUrl: string) => void;
 };
 
 export default function ReservationGridTableCell({
@@ -21,7 +18,6 @@ export default function ReservationGridTableCell({
 }: ReservationGridTableCellProps) {
   const [cursor, setCursor] = useState<CSSProperties["cursor"]>("pointer");
 
-  const { booths } = useBooth();
   const { boothCellValues } = useBoothCellValues();
 
   const cellValue = boothCellValues.findCellValueByCellNum({ rowNum, colNum });
@@ -51,21 +47,27 @@ export default function ReservationGridTableCell({
 
   function handleDragEnd() {
     setCursor("pointer");
-    onDragEnd();
-  }
 
-  function handleClick() {
-    const boothId = booths[colNum - 1].id;
-    const timeNum = (rowNum - 1) * minimumReservationDuration;
-    const time = formatToTimeString(timeNum);
-
-    const cellValue = boothCellValues.findCellValue({ boothId, time });
+    const cellValue = boothCellValues.findCellValueByCellNum({
+      rowNum,
+      colNum,
+    });
     if (cellValue?.reservationUrl === undefined) {
       return;
     }
-
-    window.location.assign(cellValue.reservationUrl);
+    onDragEnd(cellValue.reservationUrl);
   }
+
+  // async function handleClick() {
+  //   const cellValue = boothCellValues.findCellValueByCellNum({
+  //     rowNum,
+  //     colNum,
+  //   });
+  //   if (cellValue?.reservationUrl === undefined) {
+  //     return;
+  //   }
+  //   window.location.assign(cellValue.reservationUrl);
+  // }
 
   return (
     <div
@@ -74,7 +76,7 @@ export default function ReservationGridTableCell({
       onDragStart={handleDragStart}
       onDragEnter={handleDragEnter}
       onDragEnd={handleDragEnd}
-      onClick={handleClick}
+      // onClick={handleClick}
     />
   );
 }
