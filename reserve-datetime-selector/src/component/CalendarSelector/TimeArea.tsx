@@ -3,7 +3,7 @@ import { reservationCellHeight } from "./ReservationArea";
 import { latticeBorder } from "./ReservationGridLattice";
 import { formatToTimeString } from "../../feature/time";
 
-export const timeAreaWidth = "50px";
+export const timeAreaWidth = "65px";
 
 type TimeAreaProps = {
   startTime: number;
@@ -29,16 +29,32 @@ export default function TimeArea({ startTime, reservationRow }: TimeAreaProps) {
         {times.map((time, idx) => (
           <div
             style={{
-              color: "#c4c4c4",
-              borderTop: idx === 0 ? latticeBorder : undefined,
-              borderRight: latticeBorder,
-              borderBottom: idx % 2 === 0 ? undefined : latticeBorder,
-              textAlign: "center",
               gridRow: idx + 1,
               gridColumn: 1,
             }}
           >
-            {idx % 2 === 0 ? formatToTimeString(time) : ""}
+            <div
+              style={{
+                display: "grid",
+                gridTemplateRows: reservationCellHeight,
+                gridTemplateColumns: "1fr 15px",
+              }}
+            >
+              <div
+                style={{ color: "#c4c4c4", position: "relative", top: "-10px" }}
+              >
+                {idx === 0 && idx % 2 === 1 ? "" : formatToTimeString(time)}
+              </div>
+              <div
+                style={{
+                  borderRight: latticeBorder,
+                  borderBottom:
+                    idx === reservationRow - 1 || idx % 2 === 0
+                      ? undefined
+                      : latticeBorder,
+                }}
+              />
+            </div>
           </div>
         ))}
       </div>
