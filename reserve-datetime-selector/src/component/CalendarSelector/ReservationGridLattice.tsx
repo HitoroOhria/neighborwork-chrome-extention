@@ -20,7 +20,7 @@ export default function ReservationGridLattice({
           <div
             style={{
               borderRight: latticeBorder,
-              borderBottom: latticeBorder,
+              borderBottom: rowIdx % 2 === 0 ? undefined : latticeBorder,
               zIndex: zIndex.reservationGridLattice,
               gridRow: rowIdx + 1,
               gridColumn: colIdx + 1,

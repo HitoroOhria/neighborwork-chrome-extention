@@ -30,15 +30,15 @@ export default function TimeArea({ startTime, reservationRow }: TimeAreaProps) {
           <div
             style={{
               color: "#c4c4c4",
-              ...(idx === 0 ? { borderTop: latticeBorder } : {}),
+              borderTop: idx === 0 ? latticeBorder : undefined,
               borderRight: latticeBorder,
-              borderBottom: latticeBorder,
+              borderBottom: idx % 2 === 0 ? undefined : latticeBorder,
               textAlign: "center",
               gridRow: idx + 1,
               gridColumn: 1,
             }}
           >
-            {formatToTimeString(time)}
+            {idx % 2 === 0 ? formatToTimeString(time) : ""}
           </div>
         ))}
       </div>
