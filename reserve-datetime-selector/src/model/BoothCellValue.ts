@@ -1,5 +1,6 @@
 const reservableChar = "○";
-// const nonReservableChar = '－'
+const reservedChar = "×";
+const notAvailableChar = "－";
 
 // テーブルの時間帯ごとのブースのセル
 export class BoothCellValue {
@@ -23,5 +24,9 @@ export class BoothCellValue {
   // ブースのセルの時間帯が予約可能か判定する
   canReserve(): boolean {
     return this.reservable === reservableChar;
+  }
+
+  reserved(): boolean {
+    return [reservedChar, notAvailableChar].includes(this.reservable);
   }
 }

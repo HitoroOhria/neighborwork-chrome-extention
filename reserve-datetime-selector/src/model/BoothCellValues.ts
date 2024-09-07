@@ -93,10 +93,15 @@ export class BoothCellValues {
     return reservableCellValues[0].reservationUrl;
   }
 
-  public getReservedBoothCellValues(): Record<string, BoothCellValue[]> {
-    const resp: Record<string, BoothCellValue[]> = {};
+  public getReservableBoothCellValueAsNull(): Record<
+    string,
+    Array<BoothCellValue | null>
+  > {
+    const resp: Record<string, Array<BoothCellValue | null>> = {};
     Object.entries(this.data).forEach(([key, cellValues]) => {
-      resp[key] = cellValues.filter((value) => !value.canReserve());
+      resp[key] = cellValues.map((value) =>
+        value.canReserve() ? null : value,
+      );
     });
 
     return resp;
@@ -109,6 +114,10 @@ export class BoothCellValues {
   }): BoothCellValue | undefined {
     const cellValues = this.data[arg.boothId];
     return cellValues.find((cellValue) => cellValue.time === arg.time);
+  }
+
+  public getCellValues(boothId: string): BoothCellValue[] {
+    return this.data[boothId];
   }
 }
 

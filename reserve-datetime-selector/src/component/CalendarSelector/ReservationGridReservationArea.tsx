@@ -1,5 +1,6 @@
 import { zIndex } from "../../feature/zIndex";
 import { boxStyle } from "../../feature/boxStyle";
+import { CSSProperties } from "react";
 
 export type GridPosition = {
   rowNum: number;
@@ -29,12 +30,7 @@ export default function ReservationGridReservationArea({
   return (
     <div
       style={{
-        background:
-          variant === "reserved"
-            ? "repeating-linear-gradient( -45deg, #F0E68C, #F0E68C 3px, #fff 0, #fff 19px)"
-            : undefined,
-        backgroundColor: variant === "reserved" ? undefined : "#BA9C7F",
-        ...(variant === "reserved" ? {} : boxStyle),
+        ...variantStyle[variant],
         zIndex: zIndex.reservationGridReservationWindow,
         gridRow: `${startGridPosition.rowNum} / ${endGridRow}`,
         gridColumn: `${startGridPosition.colNum} / ${endGridCol}`,
@@ -42,3 +38,26 @@ export default function ReservationGridReservationArea({
     />
   );
 }
+
+const reservedStyle: CSSProperties = {
+  border: "3px dashed #F0E68C",
+  background:
+    "repeating-linear-gradient( -45deg, #F0E68C, #F0E68C 3px, #fff 0, #fff 19px)",
+};
+
+const variantStyle: Record<
+  ReservationGridReservationAreaProps["variant"],
+  CSSProperties
+> = {
+  reserved: {
+    margin: "3px 4px",
+    border: "2px solid #F0E68C",
+    borderRadius: boxStyle.borderRadius,
+    background:
+      "repeating-linear-gradient(-45deg, #F0E68C, #F0E68C 1.5px, #fff 0, #fff 20px)",
+  },
+  reservation: {
+    backgroundColor: "#BA9C7F",
+    ...boxStyle,
+  },
+};

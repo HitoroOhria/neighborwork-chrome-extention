@@ -3,8 +3,6 @@ import ReservationGridReservationArea, {
 } from "./ReservationGridReservationArea";
 import { BoothCellValues, boothCellValues } from "../../model/BoothCellValues";
 import { allBoothIds, Booth, booths } from "../../feature/booth";
-import { getTimeAsMinutes } from "../../feature/time";
-import { minimumReservationDuration } from "./CalendarSelector";
 import { useMemo } from "react";
 
 type ReservationGridReservedAreasProps = {};
@@ -14,7 +12,6 @@ export default function ReservationGridReservedAreas({}: ReservationGridReserved
     () => getReservedAreasProps(allBoothIds, booths, boothCellValues),
     [allBoothIds, booths, boothCellValues],
   );
-  console.log("reservedAreasProps", reservedAreasProps);
 
   return (
     <>
@@ -32,27 +29,53 @@ export default function ReservationGridReservedAreas({}: ReservationGridReserved
 
 type ReservedAreasProps = Omit<ReservationGridReservationAreaProps, "variant">;
 
+type RowNum = {
+  start: number | undefined;
+  end: number | undefined;
+};
+
 function getReservedAreasProps(
   allBoothIds: string[],
   booths: Booth[],
   boothCellValues: BoothCellValues,
 ): ReservedAreasProps[] {
-  const reservedBoothCellValues = boothCellValues.getReservedBoothCellValues();
-  console.log("reservedBoothCellValues", reservedBoothCellValues);
-
   return allBoothIds.flatMap<ReservedAreasProps>((boothId) => {
-    const cellValues = reservedBoothCellValues[boothId];
+    const cellValues = boothCellValues.getCellValues(boothId);
     const colNum = booths.findIndex((booth) => booth.id === boothId) + 1;
 
-    return cellValues.map<ReservedAreasProps>((cellValue) => {
-      const timeNum = getTimeAsMinutes(cellValue.time);
-      const startRowNum = timeNum / minimumReservationDuration + 1;
-      // const endRowNum = startRowNum + 1;
+    const rowNums: RowNum[] = [];
+    for (let i = 0; i < cellValues.length; i++) {
+      const value = cellValues[i];
+      // セルが予約済みであれば、startRowNum を埋める
+      if (value.reserved()) {
+        const rowNum = rowNums.at(-1);
+        if (rowNum === undefined) {
+          rowNums.push({ start: i + 1, end: undefined });
+          continue;
+        }
+        if (rowNum.end === undefined) {
+          continue;
+        }
 
-      return {
-        startGridPosition: { rowNum: startRowNum, colNum },
-        endGridPosition: undefined, // { rowNum: endRowNum, colNum },
-      };
-    });
+        rowNums.push({ start: i + 1, end: undefined });
+        continue;
+      }
+
+      // セルが予約可能であれば、endRowNum を埋める
+      const rowNum = rowNums.at(-1);
+      if (rowNum === undefined) {
+        continue;
+      }
+      if (rowNum.end !== undefined) {
+        continue;
+      }
+
+      rowNum.end = i;
+    }
+
+    return rowNums.map((rowNum) => ({
+      startGridPosition: { rowNum: rowNum.start!, colNum },
+      endGridPosition: { rowNum: rowNum.end!, colNum },
+    }));
   });
 }
