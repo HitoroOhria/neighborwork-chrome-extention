@@ -10,3 +10,11 @@ export function formatToTimeString(time: number) {
   // "hh:mm" 形式の文字列を返す
   return `${formattedHours}:${formattedMinutes}`;
 }
+
+export function getTimeAsMinutes(time: string): number {
+  const [hourStr, minutesStr] = time.split(":");
+  const hour = Number(hourStr) * 60;
+  const minutes = Number(minutesStr);
+
+  return hour + minutes;
+}

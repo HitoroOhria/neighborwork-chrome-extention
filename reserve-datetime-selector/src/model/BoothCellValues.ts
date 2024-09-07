@@ -24,7 +24,7 @@ const cellIndexPerBooth: CellIndexPerBooth = {
 };
 
 // テーブルのブースごとのセルデータ
-class BoothCellValues {
+export class BoothCellValues {
   // { [boothId]: BoothCellValue[] } のブースごとのセルを集めたデータ
   private readonly data: Record<string, BoothCellValue[]>;
 
@@ -91,6 +91,15 @@ class BoothCellValues {
 
     // 最小の時間からソートされているはずなので、ソート処理はスキップする
     return reservableCellValues[0].reservationUrl;
+  }
+
+  public getReservedBoothCellValues(): Record<string, BoothCellValue[]> {
+    const resp: Record<string, BoothCellValue[]> = {};
+    Object.entries(this.data).forEach(([key, cellValues]) => {
+      resp[key] = cellValues.filter((value) => !value.canReserve());
+    });
+
+    return resp;
   }
 
   // ブース ID と時間帯からセルを検索する

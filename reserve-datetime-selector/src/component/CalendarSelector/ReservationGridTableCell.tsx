@@ -1,4 +1,4 @@
-import { DragEvent } from "react";
+import { CSSProperties, DragEvent, useState } from "react";
 import { boothCellValues } from "../../model/BoothCellValues";
 import { booths } from "../../feature/booth";
 import { minimumReservationDuration } from "./CalendarSelector";
@@ -19,20 +19,27 @@ export default function ReservationGridTableCell({
   onDragOver,
   onDragEnd,
 }: ReservationGridTableCellProps) {
-  function handleDragStart(e: DragEvent<HTMLDivElement>) {
+  const [cursor, setCursor] = useState<CSSProperties["cursor"]>("pointer");
+
+  function disableDragPreview(e: DragEvent<HTMLDivElement>) {
     const img = new Image();
-    // ドラッグ中のプレビューを非表示
     img.src = "";
     e.dataTransfer.setDragImage(img, 0, 0);
+  }
 
+  function handleDragStart(e: DragEvent<HTMLDivElement>) {
+    disableDragPreview(e);
+    setCursor("grab");
     onDragStart(rowNum, colNum);
   }
 
   function handleDragEnter() {
+    setCursor("grab");
     onDragOver(rowNum, colNum);
   }
 
   function handleDragEnd() {
+    setCursor("pointer");
     onDragEnd();
   }
 
@@ -51,7 +58,7 @@ export default function ReservationGridTableCell({
 
   return (
     <div
-      style={{ gridRow: rowNum, gridColumn: colNum }}
+      style={{ cursor, gridRow: rowNum, gridColumn: colNum }}
       draggable
       onDragStart={handleDragStart}
       onDragEnter={handleDragEnter}

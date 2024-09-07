@@ -5,6 +5,7 @@ import ReservationGridReservationArea, {
   GridPosition,
 } from "./ReservationGridReservationArea";
 import { useState } from "react";
+import ReservationGridReservedAreas from "./ReservationGridReservedAreas";
 
 export const reservationCellHeight = "22px";
 
@@ -54,7 +55,9 @@ export default function ReservationArea({ row, col }: ReservationProps) {
           onDragOver={handleTableCellDragging}
           onDragEnd={handleTableCellDragEnd}
         />
+        <ReservationGridReservedAreas />
         <ReservationGridReservationArea
+          variant={"reservation"}
           startGridPosition={startReservationAreaPosition}
           endGridPosition={endReservationAreaPosition}
         />

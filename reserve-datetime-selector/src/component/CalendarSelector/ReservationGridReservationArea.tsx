@@ -6,12 +6,14 @@ export type GridPosition = {
   colNum: number;
 };
 
-type ReservationGridReservationAreaProps = {
+export type ReservationGridReservationAreaProps = {
+  variant: "reserved" | "reservation";
   startGridPosition: GridPosition | undefined;
   endGridPosition: GridPosition | undefined;
 };
 
 export default function ReservationGridReservationArea({
+  variant,
   startGridPosition,
   endGridPosition,
 }: ReservationGridReservationAreaProps) {
@@ -27,8 +29,12 @@ export default function ReservationGridReservationArea({
   return (
     <div
       style={{
-        backgroundColor: "#BA9C7F",
-        ...boxStyle,
+        background:
+          variant === "reserved"
+            ? "repeating-linear-gradient( -45deg, #F0E68C, #F0E68C 3px, #fff 0, #fff 19px)"
+            : undefined,
+        backgroundColor: variant === "reserved" ? undefined : "#BA9C7F",
+        ...(variant === "reserved" ? {} : boxStyle),
         zIndex: zIndex.reservationGridReservationWindow,
         gridRow: `${startGridPosition.rowNum} / ${endGridRow}`,
         gridColumn: `${startGridPosition.colNum} / ${endGridCol}`,
