@@ -49,12 +49,6 @@ export default function ReservationGridReservationArea({
   );
 }
 
-const reservedStyle: CSSProperties = {
-  border: "3px dashed #F0E68C",
-  background:
-    "repeating-linear-gradient( -45deg, #F0E68C, #F0E68C 3px, #fff 0, #fff 19px)",
-};
-
 const variantStyle: Record<
   ReservationGridReservationAreaProps["variant"],
   CSSProperties
@@ -68,6 +62,7 @@ const variantStyle: Record<
   },
   reservation: {
     backgroundColor: "#B2FFFF",
+    opacity: 0.8,
     ...boxStyle,
   },
 };
