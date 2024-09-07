@@ -1,6 +1,6 @@
 import { zIndex } from "../../feature/zIndex";
 import { boxStyle } from "../../feature/boxStyle";
-import { CSSProperties } from "react";
+import { CSSProperties, ReactNode } from "react";
 
 export type GridPosition = {
   rowNum: number;
@@ -12,6 +12,7 @@ export type ReservationGridReservationAreaProps = {
   startGridPosition: GridPosition | undefined;
   endGridPosition: GridPosition | undefined;
   rowReverse?: boolean;
+  children?: ReactNode;
 };
 
 export default function ReservationGridReservationArea({
@@ -19,6 +20,7 @@ export default function ReservationGridReservationArea({
   startGridPosition,
   endGridPosition,
   rowReverse,
+  children,
 }: ReservationGridReservationAreaProps) {
   if (startGridPosition === undefined) {
     return null;
@@ -45,7 +47,9 @@ export default function ReservationGridReservationArea({
         gridRow: `${startGridPosition.rowNum} / ${endGridRow}`,
         gridColumn: `${startGridPosition.colNum} / ${endGridCol}`,
       }}
-    />
+    >
+      {children}
+    </div>
   );
 }
 

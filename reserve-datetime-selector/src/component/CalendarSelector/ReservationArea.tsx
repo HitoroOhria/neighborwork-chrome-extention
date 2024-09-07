@@ -8,6 +8,7 @@ import { useState } from "react";
 import ReservationGridReservedAreas from "./ReservationGridReservedAreas";
 import { submitBookingForm } from "../../feature/bookingFrom";
 import { useBoothCellValues } from "../../model/BoothCellValues";
+import ReservationGridReservationAreaTime from "./ReservationGridReservationAreaTime";
 
 export const reservationCellHeight = "22px";
 
@@ -103,7 +104,13 @@ export default function ReservationArea({ row, col }: ReservationProps) {
           startGridPosition={startRAreaPosition}
           endGridPosition={endRAreaPosition}
           rowReverse={reverse}
-        />
+        >
+          <ReservationGridReservationAreaTime
+            startGridPosition={startRAreaPosition}
+            endGridPosition={endRAreaPosition}
+            rowReverse={reverse}
+          />
+        </ReservationGridReservationArea>
       </div>
     </div>
   );
