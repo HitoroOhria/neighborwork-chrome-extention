@@ -1,4 +1,4 @@
-import { boothCellValues } from "../model/BoothCellValues";
+import { boothCellValues } from "../../model/BoothCellValues";
 import { ChangeEvent, useMemo, useState } from "react";
 
 type TimeSelectProps = {

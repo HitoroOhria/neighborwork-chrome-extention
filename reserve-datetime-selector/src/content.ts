@@ -4,7 +4,8 @@ import {
   makeOrigTableHidden,
 } from "./feature/orig_table";
 import { createRoot } from "react-dom/client";
-import ReservationTBody from "./component/ReservationTBody";
+import ReservationTBody from "./component/TimeSelector/ReservationTBody";
+import CalendarSelector from "./component/CalendarSelector/CalendarSelector";
 
 makeOrigTableHidden();
 insertReactDom();
@@ -15,5 +16,6 @@ function insertReactDom() {
   appendElementToTableAfter(app);
 
   const root = createRoot(document.getElementById("app") as HTMLElement);
-  root.render(ReservationTBody({ booths }));
+  // root.render(ReservationTBody({ booths }));
+  root.render(CalendarSelector({ booths }));
 }

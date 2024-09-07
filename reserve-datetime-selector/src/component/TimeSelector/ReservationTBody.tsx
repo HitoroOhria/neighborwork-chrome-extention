@@ -1,5 +1,6 @@
-import { Booth } from "../feature/booth";
+import { Booth } from "../../feature/booth";
 import TimeSelect from "./TimeSelect";
+import { headerColStyle } from "../../feature/headerColStyle";
 
 type ReservationTBodyProps = {
   booths: Booth[];
@@ -10,10 +11,7 @@ export default function ReservationTBody({ booths }: ReservationTBodyProps) {
     <tbody>
       <tr>
         {booths.map((booth) => (
-          <th
-            className="article-name" // WordPress 側で用意されているクラス
-            colSpan={0}
-          >
+          <th style={headerColStyle} colSpan={0}>
             {booth.name}
           </th>
         ))}
