@@ -9,10 +9,18 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "config": {
+    "zipFile": "neighborwork-chrome-extention.zip",
+    "chromeDashboard": "https://chrome.google.com/webstore/devconsole/f950e9e0-a986-4fd0-91b3-cbf770aaf390/bfibpmjaailjebfjgdgfapdpenglolgb/edit",
+    "chromeWebStore": "https://chromewebstore.google.com/detail/bfibpmjaailjebfjgdgfapdpenglolgb"
+  },
   "scripts": {
     "prePublish": "npm run lint && npm run build && npm run moveFiles",
     "build": "vite build --emptyOutDir",
     "moveFiles": "rm -rf entrypoint/* && yes | cp dist/content.js entrypoint && yes | cp static/* entrypoint",
+    "zip": "yes | rm -rf $npm_package_config_zipFile && zip -r -j $npm_package_config_zipFile entrypoint/* && yes | cp $npm_package_config_zipFile ~/Downloads",
+    "chromeDashboard": "open $npm_package_config_chromeDashboard",
+    "chromeWebStore": "open $npm_package_config_chromeWebStore",
     "lint": "tsc",
     "format": "prettier . --write"
   },
