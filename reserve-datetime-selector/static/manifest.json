@@ -1,8 +1,8 @@
 {
   "version": "1.0.0",
   "manifest_version": 3,
-  "name": "NEIGHBORWORK Time Selector",
-  "description": "NEIGHBORWORK の会議室予約を簡単に行う非公式アプリケーションです。",
+  "name": "NEIGHBOR WORK Time Selector",
+  "description": "NEIGHBOR WORK の会議室予約を簡単に行う非公式アプリケーションです。",
   "icons": {
     "16": "logo.png",
     "48": "logo.png",
