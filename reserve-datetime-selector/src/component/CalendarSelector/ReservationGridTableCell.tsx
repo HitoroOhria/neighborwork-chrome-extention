@@ -6,7 +6,7 @@ type ReservationGridTableCellProps = {
   colNum: number;
   onDragStart: (rowNum: number, colNum: number) => void;
   onDragOver: (rowNum: number, colNum: number) => void;
-  onDragEnd: (reservationUrl: string) => void;
+  onDragEnd: () => void;
 };
 
 export default function ReservationGridTableCell({
@@ -20,7 +20,10 @@ export default function ReservationGridTableCell({
 
   const { boothCellValues } = useBoothCellValues();
 
-  const cellValue = boothCellValues.findCellValueByCellNum({ rowNum, colNum });
+  const cellValue = boothCellValues.findCellValueByGridPosition({
+    rowNum,
+    colNum,
+  });
 
   useEffect(() => {
     if (cellValue?.reserved()) {
@@ -48,26 +51,8 @@ export default function ReservationGridTableCell({
   function handleDragEnd() {
     setCursor("pointer");
 
-    const cellValue = boothCellValues.findCellValueByCellNum({
-      rowNum,
-      colNum,
-    });
-    if (cellValue?.reservationUrl === undefined) {
-      return;
-    }
-    onDragEnd(cellValue.reservationUrl);
+    onDragEnd();
   }
-
-  // async function handleClick() {
-  //   const cellValue = boothCellValues.findCellValueByCellNum({
-  //     rowNum,
-  //     colNum,
-  //   });
-  //   if (cellValue?.reservationUrl === undefined) {
-  //     return;
-  //   }
-  //   window.location.assign(cellValue.reservationUrl);
-  // }
 
   return (
     <div
@@ -76,7 +61,6 @@ export default function ReservationGridTableCell({
       onDragStart={handleDragStart}
       onDragEnter={handleDragEnter}
       onDragEnd={handleDragEnd}
-      // onClick={handleClick}
     />
   );
 }

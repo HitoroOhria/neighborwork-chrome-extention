@@ -7,10 +7,16 @@ import ReservationGridReservationArea, {
 import { useState } from "react";
 import ReservationGridReservedAreas from "./ReservationGridReservedAreas";
 import { submitBookingForm } from "../../feature/bookingFrom";
+import { useBoothCellValues } from "../../model/BoothCellValues";
 
 export const reservationCellHeight = "22px";
 
 const maxReserveDuration = 120;
+
+// Before initialize が発生するので関数で呼ぶ
+function maxReserveCellCount(): number {
+  return maxReserveDuration / minReservationDuration;
+}
 
 type ReservationProps = {
   row: number;
@@ -18,12 +24,16 @@ type ReservationProps = {
 };
 
 export default function ReservationArea({ row, col }: ReservationProps) {
+  const [reverse, setReverse] = useState(false);
+
   const [startRAreaPosition, setStartRAreaPosition] = useState<
     GridPosition | undefined
   >(undefined);
   const [endRAreaPosition, setEndRAreaPosition] = useState<
     GridPosition | undefined
   >(undefined);
+
+  const { boothCellValues } = useBoothCellValues();
 
   function handleTableCellDragging(rowNum: number, colNum: number) {
     // 最初のドラッグ要素であれば、そのまま値をセットする
@@ -32,29 +42,42 @@ export default function ReservationArea({ row, col }: ReservationProps) {
       return;
     }
 
+    const reverse = startRAreaPosition.rowNum > rowNum;
+    setReverse(reverse);
+
     // 既にドラッグ済みの要素と異なる列にはウィンドウを広げない
     if (startRAreaPosition.colNum !== colNum) {
       return;
     }
     // 最大予約可能数を選択済みであれば、それ以上はウィンドウを広げない
-    const maxReserveCellCount = maxReserveDuration / minReservationDuration;
     const cellCount = Math.abs(startRAreaPosition.rowNum - rowNum) + 1;
-    if (cellCount > maxReserveCellCount) {
+    const maxCellCount = reverse
+      ? maxReserveCellCount() + 1
+      : maxReserveCellCount();
+    if (cellCount > maxCellCount) {
       return;
     }
 
     setEndRAreaPosition({ rowNum, colNum });
   }
 
-  async function handleTableCellDragEnd(reservationUrl: string) {
+  async function handleTableCellDragEnd() {
     if (startRAreaPosition === undefined || endRAreaPosition === undefined) {
       return;
     }
 
-    const duration =
-      (endRAreaPosition.rowNum - startRAreaPosition.rowNum + 1) *
-      minReservationDuration;
-    await submitBookingForm(reservationUrl, duration);
+    const position = reverse ? endRAreaPosition : startRAreaPosition;
+    const cellValue = boothCellValues.findCellValueByGridPosition(position);
+    if (cellValue?.reservationUrl === undefined) {
+      return;
+    }
+
+    const rowDiff = Math.abs(
+      startRAreaPosition.rowNum - endRAreaPosition.rowNum,
+    );
+    const cellCount = reverse ? rowDiff - 1 : rowDiff + 1;
+    const duration = cellCount * minReservationDuration;
+    await submitBookingForm(cellValue.reservationUrl, duration);
   }
 
   return (
@@ -79,6 +102,7 @@ export default function ReservationArea({ row, col }: ReservationProps) {
           variant={"reservation"}
           startGridPosition={startRAreaPosition}
           endGridPosition={endRAreaPosition}
+          rowReverse={reverse}
         />
       </div>
     </div>

@@ -11,21 +11,31 @@ export type ReservationGridReservationAreaProps = {
   variant: "reserved" | "reservation";
   startGridPosition: GridPosition | undefined;
   endGridPosition: GridPosition | undefined;
+  rowReverse?: boolean;
 };
 
 export default function ReservationGridReservationArea({
   variant,
   startGridPosition,
   endGridPosition,
+  rowReverse,
 }: ReservationGridReservationAreaProps) {
   if (startGridPosition === undefined) {
     return null;
   }
 
-  const endGridRow =
-    endGridPosition === undefined ? "span 1" : endGridPosition.rowNum + 1;
-  const endGridCol =
-    endGridPosition === undefined ? "span 1" : endGridPosition.colNum + 1;
+  const endGridRow = (function (): string | number {
+    if (endGridPosition === undefined) {
+      return "span 1";
+    }
+    return endGridPosition.rowNum + (rowReverse ? 0 : 1);
+  })();
+  const endGridCol = (function (): string | number {
+    if (endGridPosition === undefined) {
+      return "span 1";
+    }
+    return endGridPosition.colNum + 1;
+  })();
 
   return (
     <div

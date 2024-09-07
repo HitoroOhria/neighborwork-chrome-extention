@@ -5,7 +5,7 @@ type ReservationGridTableProps = {
   col: number;
   onDragStart: (rowNum: number, colNum: number) => void;
   onDragOver: (rowNum: number, colNum: number) => void;
-  onDragEnd: (reservationUrl: string) => void;
+  onDragEnd: () => void;
 };
 
 export default function ReservationGridTable({

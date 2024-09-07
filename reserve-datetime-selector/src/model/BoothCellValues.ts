@@ -103,7 +103,7 @@ export class BoothCellValues {
     return cellValues.find((cellValue) => cellValue.time === arg.time);
   }
 
-  public findCellValueByCellNum(arg: {
+  public findCellValueByGridPosition(arg: {
     rowNum: number;
     colNum: number;
   }): BoothCellValue | undefined {
