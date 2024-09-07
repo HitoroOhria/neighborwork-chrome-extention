@@ -1,8 +1,13 @@
 {
-  "name": "NEIGHBORWORK Time Selector",
   "version": "1.0.0",
   "manifest_version": 3,
-  "description": "NEIGHBORWORK Time Selector Chrome Extension",
+  "name": "NEIGHBORWORK Time Selector",
+  "description": "NEIGHBORWORK の会議室予約を簡単に行う非公式アプリケーションです。",
+  "icons": {
+    "16": "logo.png",
+    "48": "logo.png",
+    "128": "logo.png"
+  },
   "content_scripts": [
     {
       "matches": ["https://sycl.neighborwork.jp/reserve_booth/*"],
