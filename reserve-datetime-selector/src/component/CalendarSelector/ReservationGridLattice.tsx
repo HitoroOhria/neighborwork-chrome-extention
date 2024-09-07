@@ -1,3 +1,5 @@
+import { zIndex } from "../../feature/zIndex";
+
 export const latticeBorder = "1px solid #DADCE0";
 
 type ReservationGridLatticeProps = {
@@ -19,6 +21,7 @@ export default function ReservationGridLattice({
             style={{
               borderRight: latticeBorder,
               borderBottom: latticeBorder,
+              zIndex: zIndex.reservationGridLattice,
               gridRow: rowIdx + 1,
               gridColumn: colIdx + 1,
             }}
