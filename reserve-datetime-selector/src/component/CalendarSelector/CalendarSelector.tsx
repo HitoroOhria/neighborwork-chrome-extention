@@ -5,7 +5,7 @@ import TimeArea, { timeAreaWidth } from "./TimeArea";
 import ReservationArea from "./ReservationArea";
 
 const dayMinutes = 24 * 60;
-export const minimumReservationDuration = 30;
+export const minReservationDuration = 30;
 
 export const areaName = {
   header: "headerArea",
@@ -16,7 +16,7 @@ export const areaName = {
 export default function CalendarSelector() {
   const { booths } = useBooth();
 
-  const reservationRow = dayMinutes / minimumReservationDuration;
+  const reservationRow = dayMinutes / minReservationDuration;
   const reservationCol = booths.length;
 
   return (

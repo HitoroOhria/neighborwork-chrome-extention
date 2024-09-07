@@ -1,4 +1,4 @@
-import { areaName, minimumReservationDuration } from "./CalendarSelector";
+import { areaName, minReservationDuration } from "./CalendarSelector";
 import ReservationGridLattice from "./ReservationGridLattice";
 import ReservationGridTable from "./ReservationGridTable";
 import ReservationGridReservationArea, {
@@ -6,9 +6,11 @@ import ReservationGridReservationArea, {
 } from "./ReservationGridReservationArea";
 import { useState } from "react";
 import ReservationGridReservedAreas from "./ReservationGridReservedAreas";
-import { clickBookingFormButton } from "../../feature/bookingFrom";
+import { submitBookingForm } from "../../feature/bookingFrom";
 
 export const reservationCellHeight = "22px";
+
+const maxReserveDuration = 120;
 
 type ReservationProps = {
   row: number;
@@ -34,6 +36,12 @@ export default function ReservationArea({ row, col }: ReservationProps) {
     if (startRAreaPosition.colNum !== colNum) {
       return;
     }
+    // 最大予約可能数を選択済みであれば、それ以上はウィンドウを広げない
+    const maxReserveCellCount = maxReserveDuration / minReservationDuration;
+    const cellCount = Math.abs(startRAreaPosition.rowNum - rowNum) + 1;
+    if (cellCount > maxReserveCellCount) {
+      return;
+    }
 
     setEndRAreaPosition({ rowNum, colNum });
   }
@@ -45,8 +53,8 @@ export default function ReservationArea({ row, col }: ReservationProps) {
 
     const duration =
       (endRAreaPosition.rowNum - startRAreaPosition.rowNum + 1) *
-      minimumReservationDuration;
-    await clickBookingFormButton(reservationUrl, duration);
+      minReservationDuration;
+    await submitBookingForm(reservationUrl, duration);
   }
 
   return (

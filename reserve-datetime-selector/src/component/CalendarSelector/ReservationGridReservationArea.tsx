@@ -57,7 +57,7 @@ const variantStyle: Record<
       "repeating-linear-gradient(-45deg, #F0E68C, #F0E68C 1.5px, #fff 0, #fff 20px)",
   },
   reservation: {
-    backgroundColor: "#BA9C7F",
+    backgroundColor: "#B2FFFF",
     ...boxStyle,
   },
 };

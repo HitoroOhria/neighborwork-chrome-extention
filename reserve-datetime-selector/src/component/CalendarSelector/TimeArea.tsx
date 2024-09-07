@@ -1,4 +1,4 @@
-import { areaName, minimumReservationDuration } from "./CalendarSelector";
+import { areaName, minReservationDuration } from "./CalendarSelector";
 import { reservationCellHeight } from "./ReservationArea";
 import { latticeBorder } from "./ReservationGridLattice";
 import { formatToTimeString } from "../../feature/time";
@@ -14,7 +14,7 @@ export default function TimeArea({ startTime, reservationRow }: TimeAreaProps) {
   const times = Array(reservationRow)
     .fill(null)
     .map((_, idx) => {
-      return startTime + idx * minimumReservationDuration;
+      return startTime + idx * minReservationDuration;
     });
 
   return (
