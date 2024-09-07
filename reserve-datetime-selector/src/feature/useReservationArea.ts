@@ -63,7 +63,7 @@ export function useReservationArea() {
     const rowDiff = Math.abs(
       startRAreaPosition.rowNum - endRAreaPosition.rowNum,
     );
-    const cellCount = reverse ? rowDiff - 1 : rowDiff + 1;
+    const cellCount = reverse ? rowDiff : rowDiff + 1;
     const duration = cellCount * minReservationDuration;
     await submitBookingForm(cellValue.reservationUrl, duration);
   }
