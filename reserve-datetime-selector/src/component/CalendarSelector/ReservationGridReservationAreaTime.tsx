@@ -27,8 +27,17 @@ export default function ReservationGridReservationAreaTime({
 
     const startCellValue =
       boothCellValues.findCellValueByGridPosition(startGridPosition);
-    setStartTime(startCellValue?.time);
-  }, [startGridPosition]);
+    if (startCellValue === undefined) {
+      return;
+    }
+    if (rowReverse) {
+      const startTime = getNextTime(startCellValue.time);
+      setStartTime(startTime);
+      return;
+    }
+
+    setStartTime(startCellValue.time);
+  }, [rowReverse, startGridPosition]);
 
   useEffect(() => {
     if (endGridPosition === undefined) {

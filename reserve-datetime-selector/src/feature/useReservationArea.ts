@@ -6,7 +6,7 @@ import { submitBookingForm } from "./bookingFrom";
 
 const maxReserveDuration = 120;
 
-// Before initialize が発生するので関数で呼ぶ
+// before initialization エラーが発生するので関数で呼ぶ
 function maxReserveCellCount(): number {
   return maxReserveDuration / minReservationDuration;
 }
@@ -39,10 +39,7 @@ export function useReservationArea() {
     }
     // 最大予約可能数を選択済みであれば、それ以上はウィンドウを広げない
     const cellCount = Math.abs(startRAreaPosition.rowNum - rowNum) + 1;
-    const maxCellCount = reverse
-      ? maxReserveCellCount() + 1
-      : maxReserveCellCount();
-    if (cellCount > maxCellCount) {
+    if (cellCount > maxReserveCellCount()) {
       return;
     }
 
@@ -63,8 +60,9 @@ export function useReservationArea() {
     const rowDiff = Math.abs(
       startRAreaPosition.rowNum - endRAreaPosition.rowNum,
     );
-    const cellCount = reverse ? rowDiff : rowDiff + 1;
+    const cellCount = rowDiff + 1;
     const duration = cellCount * minReservationDuration;
+
     await submitBookingForm(cellValue.reservationUrl, duration);
   }
 

@@ -26,12 +26,17 @@ export default function ReservationGridReservationArea({
     return null;
   }
 
+  const startGridRow = rowReverse
+    ? startGridPosition.rowNum + 1
+    : startGridPosition.rowNum;
+
   const endGridRow = (function (): string | number {
     if (endGridPosition === undefined) {
       return "span 1";
     }
     return endGridPosition.rowNum + (rowReverse ? 0 : 1);
   })();
+
   const endGridCol = (function (): string | number {
     if (endGridPosition === undefined) {
       return "span 1";
@@ -44,7 +49,7 @@ export default function ReservationGridReservationArea({
       style={{
         ...variantStyle[variant],
         zIndex: zIndex.reservationGridReservationWindow,
-        gridRow: `${startGridPosition.rowNum} / ${endGridRow}`,
+        gridRow: `${startGridRow} / ${endGridRow}`,
         gridColumn: `${startGridPosition.colNum} / ${endGridCol}`,
       }}
     >
