@@ -1,4 +1,10 @@
+# dev
 .idea
 node_modules
-dist
+
+# artifact
 neighborwork-chrome-extention.zip
+
+# chrome extention
+dist
+entrypoint
