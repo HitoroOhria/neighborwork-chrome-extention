@@ -7,4 +7,5 @@ neighborwork-chrome-extention.zip
 
 # chrome extention
 dist
-entrypoint
+/entrypoint
+!.gitkeep
