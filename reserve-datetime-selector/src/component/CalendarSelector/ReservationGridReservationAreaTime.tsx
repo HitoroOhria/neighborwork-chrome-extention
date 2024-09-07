@@ -47,16 +47,18 @@ export default function ReservationGridReservationAreaTime({
       return;
     }
 
-    const endTime = getNextTime(endCellValue.time);
+    const endTime = rowReverse
+      ? endCellValue.time
+      : getNextTime(endCellValue.time);
     setEndTime(endTime);
-  }, [startTime, endGridPosition]);
+  }, [rowReverse, startTime, endGridPosition]);
+
+  if (startTime === undefined || endTime === undefined) {
+    return null;
+  }
 
   const dispStartTime = rowReverse ? endTime : startTime;
   const dispEndTime = rowReverse ? startTime : endTime;
-
-  if (dispStartTime === undefined || dispEndTime === undefined) {
-    return null;
-  }
 
   return (
     <div style={{ paddingTop: "3px", paddingLeft: "8px" }}>
