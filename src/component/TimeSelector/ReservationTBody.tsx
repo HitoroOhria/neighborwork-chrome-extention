@@ -1,4 +1,4 @@
-import { Booth } from "../../feature/booth";
+import { Booth } from "../../model/Booth";
 import TimeSelect from "./TimeSelect";
 import { headerColStyle } from "../../feature/headerColStyle";
 
@@ -11,7 +11,7 @@ export default function ReservationTBody({ booths }: ReservationTBodyProps) {
     <tbody>
       <tr>
         {booths.map((booth) => (
-          <th style={headerColStyle} colSpan={0}>
+          <th key={booth.id} style={headerColStyle} colSpan={0}>
             {booth.name}
           </th>
         ))}
@@ -19,7 +19,7 @@ export default function ReservationTBody({ booths }: ReservationTBodyProps) {
       <tr>
         {booths.map((booth) => (
           <td>
-            <TimeSelect boothId={booth.id} />
+            <TimeSelect key={booth.id} boothId={booth.id} />
           </td>
         ))}
       </tr>

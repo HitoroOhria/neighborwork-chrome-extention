@@ -1,4 +1,6 @@
-async function getLocalDom(url: string): Promise<Document> {
+// ページのレスポンスを取得し、ローカルデータとしてパースする
+// 現在のドキュメント (document グローバルオブジェクト) には格納されない点に注意
+async function getDocumentAsLocalDom(url: string): Promise<Document> {
   return fetch(url)
     .then((res) => res.text())
     .then((text) => {
@@ -7,33 +9,35 @@ async function getLocalDom(url: string): Promise<Document> {
     });
 }
 
+// 予約フォームを送信する
 export async function submitBookingForm(
   bookingFormUrl: string,
   duration: number,
 ) {
-  const bookingFormDom = await getLocalDom(bookingFormUrl);
+  const bookingFormDoc = await getDocumentAsLocalDom(bookingFormUrl);
 
-  // DOMParser の結果はローカルに保存されるだけなので、document に要素を作成する
-  const form = bindForm(bookingFormDom);
+  // DOMParser の結果はローカルに保存されるだけなので、現在の document に要素を作成する
+  const form = bindForm(bookingFormDoc);
   const timeExtensionSelect = bindSelect(
-    bookingFormDom,
+    bookingFormDoc,
     "booking[options][time-extension]",
   );
-  const options = bindOptions(bookingFormDom);
-  const reserveActionButton = bindButton(bookingFormDom, "reserve_action");
+  const options = bindOptions(bookingFormDoc);
+  const reserveActionButton = bindButton(bookingFormDoc, "reserve_action");
 
-  const adultInput = bindInput(bookingFormDom, "booking[client][adult]");
-  const seiInput = bindInput(bookingFormDom, "booking[client][sei]");
-  const meiInput = bindInput(bookingFormDom, "booking[client][mei]");
-  const emailInput = bindInput(bookingFormDom, "booking[client][email]");
-  const email2Input = bindInput(bookingFormDom, "booking[client][email2]");
-  const bookingNoteInput = bindInput(bookingFormDom, "booking[note]");
-  const nonceInput = bindInput(bookingFormDom, "nonce");
-  const actionInput = bindInput(bookingFormDom, "action");
-  const articleIdInput = bindInput(bookingFormDom, "booking[article_id]");
-  const bookingTimeInput = bindInput(bookingFormDom, "booking[booking_time]");
-  const userIdInput = bindInput(bookingFormDom, "booking[user_id]");
+  const adultInput = bindInput(bookingFormDoc, "booking[client][adult]");
+  const seiInput = bindInput(bookingFormDoc, "booking[client][sei]");
+  const meiInput = bindInput(bookingFormDoc, "booking[client][mei]");
+  const emailInput = bindInput(bookingFormDoc, "booking[client][email]");
+  const email2Input = bindInput(bookingFormDoc, "booking[client][email2]");
+  const bookingNoteInput = bindInput(bookingFormDoc, "booking[note]");
+  const nonceInput = bindInput(bookingFormDoc, "nonce");
+  const actionInput = bindInput(bookingFormDoc, "action");
+  const articleIdInput = bindInput(bookingFormDoc, "booking[article_id]");
+  const bookingTimeInput = bindInput(bookingFormDoc, "booking[booking_time]");
+  const userIdInput = bindInput(bookingFormDoc, "booking[user_id]");
 
+  // 現在のページの document に要素を格納
   document.body.appendChild(form);
   options.forEach((option) => timeExtensionSelect.appendChild(option));
   form.appendChild(timeExtensionSelect);
@@ -50,7 +54,9 @@ export async function submitBookingForm(
   form.appendChild(bookingTimeInput);
   form.appendChild(userIdInput);
 
+  // select の子要素に option を格納したあとで値を変更すること
   timeExtensionSelect.value = `${duration}min`;
+
   form.submit();
 }
 

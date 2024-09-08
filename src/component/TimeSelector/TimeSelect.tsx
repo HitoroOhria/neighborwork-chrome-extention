@@ -1,4 +1,4 @@
-import { useBoothCellValues } from "../../model/BoothCellValues";
+import { useBoothCells } from "../../model/BoothCells";
 import { ChangeEvent, useMemo, useState } from "react";
 
 type TimeSelectProps = {
@@ -6,20 +6,20 @@ type TimeSelectProps = {
 };
 
 export default function TimeSelect({ boothId }: TimeSelectProps) {
-  const { boothCellValues } = useBoothCellValues();
+  const { boothCells } = useBoothCells();
   const [reservationUrl, setReservationUrl] = useState<string | undefined>(
-    boothCellValues.getMinimumTimeReservationUrl(boothId),
+    boothCells.getMinimumTimeReservationUrl(boothId),
   );
 
   const boothTimes = useMemo(() => {
-    return boothCellValues.getBoothReservableTimes(boothId);
+    return boothCells.getBoothReservableTimes(boothId);
   }, [boothId]);
 
   function handleSelectChange(e: ChangeEvent<HTMLSelectElement>) {
     const time = e.target.value;
-    const cellValue = boothCellValues.findCellValue({ boothId, time });
+    const cell = boothCells.findBoothCell({ boothId, time });
 
-    setReservationUrl(cellValue?.reservationUrl);
+    setReservationUrl(cell?.reservationUrl);
   }
 
   return (
@@ -27,7 +27,9 @@ export default function TimeSelect({ boothId }: TimeSelectProps) {
       <div className="vertical-container">
         <select className="minimal" onChange={handleSelectChange}>
           {boothTimes.map((time) => (
-            <option value={time}>{time}</option>
+            <option key={time} value={time}>
+              {time}
+            </option>
           ))}
         </select>
         <a href={reservationUrl}>

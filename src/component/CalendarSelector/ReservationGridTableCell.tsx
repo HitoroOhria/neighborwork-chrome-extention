@@ -1,9 +1,9 @@
 import { CSSProperties, DragEvent, useEffect, useState } from "react";
-import { useBoothCellValues } from "../../model/BoothCellValues";
+import { useBoothCells } from "../../model/BoothCells";
 
 type ReservationGridTableCellProps = {
-  rowNum: number;
-  colNum: number;
+  row: number;
+  col: number;
   onDragStart: (rowNum: number, colNum: number) => void;
   onDragOver: (rowNum: number, colNum: number) => void;
   onDragEnd: () => void;
@@ -11,8 +11,8 @@ type ReservationGridTableCellProps = {
 };
 
 export default function ReservationGridTableCell({
-  rowNum,
-  colNum,
+  row,
+  col,
   onDragStart,
   onDragOver,
   onDragEnd,
@@ -20,34 +20,28 @@ export default function ReservationGridTableCell({
 }: ReservationGridTableCellProps) {
   const [cursor, setCursor] = useState<CSSProperties["cursor"]>("pointer");
 
-  const { boothCellValues } = useBoothCellValues();
+  const { boothCells } = useBoothCells();
 
-  const cellValue = boothCellValues.findCellValueByGridPosition({
-    rowNum,
-    colNum,
+  const cell = boothCells.findBoothCellByCellNumber({
+    row,
+    col,
   });
 
   useEffect(() => {
-    if (cellValue?.reserved()) {
+    if (cell?.reserved()) {
       setCursor("default");
     }
-  }, [cellValue]);
-
-  function disableDragPreview(e: DragEvent<HTMLDivElement>) {
-    const img = new Image();
-    img.src = "";
-    e.dataTransfer.setDragImage(img, 0, 0);
-  }
+  }, [cell]);
 
   function handleDragStart(e: DragEvent<HTMLDivElement>) {
     disableDragPreview(e);
     setCursor("grab");
-    onDragStart(rowNum, colNum);
+    onDragStart(row, col);
   }
 
   function handleDragEnter() {
     setCursor("grab");
-    onDragOver(rowNum, colNum);
+    onDragOver(row, col);
   }
 
   function handleDragEnd() {
@@ -57,12 +51,12 @@ export default function ReservationGridTableCell({
   }
 
   function handleClick() {
-    onClick(rowNum, colNum);
+    onClick(row, col);
   }
 
   return (
     <div
-      style={{ cursor, gridRow: rowNum, gridColumn: colNum }}
+      style={{ cursor, gridRow: row, gridColumn: col }}
       draggable
       onDragStart={handleDragStart}
       onDragEnter={handleDragEnter}
@@ -70,4 +64,11 @@ export default function ReservationGridTableCell({
       onClick={handleClick}
     />
   );
+}
+
+// ドラッグ中のプレビュー表示をなくす
+function disableDragPreview(e: DragEvent<HTMLDivElement>) {
+  const img = new Image();
+  img.src = "";
+  e.dataTransfer.setDragImage(img, 0, 0);
 }

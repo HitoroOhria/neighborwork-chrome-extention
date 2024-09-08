@@ -1,12 +1,11 @@
-import { Booth, useBooth } from "../../feature/booth";
+import { useBooth } from "../../model/Booth";
 import { headerColStyle } from "../../feature/headerColStyle";
 import HeaderArea from "./HeaderArea";
 import TimeArea, { timeAreaWidth } from "./TimeArea";
 import ReservationArea from "./ReservationArea";
+import { dayMinutes, minReservationDuration } from "../../feature/neighborWork";
 
-const dayMinutes = 24 * 60;
-export const minReservationDuration = 30;
-
+// Grid エリアの名前
 export const areaName = {
   header: "headerArea",
   time: "timeArea",
@@ -16,8 +15,8 @@ export const areaName = {
 export default function CalendarSelector() {
   const { booths } = useBooth();
 
-  const reservationRow = dayMinutes / minReservationDuration;
-  const reservationCol = booths.length;
+  const reservationAreaRow = dayMinutes / minReservationDuration;
+  const reservationAreaCol = booths.length;
 
   return (
     <div
@@ -32,8 +31,8 @@ export default function CalendarSelector() {
       }}
     >
       <HeaderArea booths={booths} />
-      <TimeArea startTime={0} reservationRow={reservationRow} />
-      <ReservationArea row={reservationRow} col={reservationCol} />
+      <TimeArea startTime={0} reservationRow={reservationAreaRow} />
+      <ReservationArea row={reservationAreaRow} col={reservationAreaCol} />
     </div>
   );
 }

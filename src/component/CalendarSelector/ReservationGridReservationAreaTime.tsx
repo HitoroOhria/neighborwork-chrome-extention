@@ -1,46 +1,46 @@
-import { useBoothCellValues } from "../../model/BoothCellValues";
-import { GridPosition } from "./ReservationGridReservationArea";
-import { formatToTimeString, getTimeAsMinutes } from "../../feature/time";
-import { minReservationDuration } from "./CalendarSelector";
+import { useBoothCells } from "../../model/BoothCells";
+import { getNextTime } from "../../feature/time";
 import { useEffect, useState } from "react";
+import { CellNumber } from "../../model/CellNumber";
 
 type ReservationGridReservationAreaTimeProps = {
-  startGridPosition: GridPosition | undefined;
-  endGridPosition: GridPosition | undefined;
+  startCellNumber: CellNumber | undefined;
+  endCellNumber: CellNumber | undefined;
   rowReverse?: boolean;
 };
 
 export default function ReservationGridReservationAreaTime({
-  startGridPosition,
-  endGridPosition,
+  startCellNumber,
+  endCellNumber,
   rowReverse,
 }: ReservationGridReservationAreaTimeProps) {
   const [startTime, setStartTime] = useState<string | undefined>(undefined);
   const [endTime, setEndTime] = useState<string | undefined>(undefined);
 
-  const { boothCellValues } = useBoothCellValues();
+  const { boothCells } = useBoothCells();
 
+  // 開始時刻をセットする
   useEffect(() => {
-    if (startGridPosition === undefined) {
+    if (startCellNumber === undefined) {
       return;
     }
 
-    const startCellValue =
-      boothCellValues.findCellValueByGridPosition(startGridPosition);
-    if (startCellValue === undefined) {
+    const startCell = boothCells.findBoothCellByCellNumber(startCellNumber);
+    if (startCell === undefined) {
       return;
     }
     if (rowReverse) {
-      const startTime = getNextTime(startCellValue.time);
+      const startTime = getNextTime(startCell.time);
       setStartTime(startTime);
       return;
     }
 
-    setStartTime(startCellValue.time);
-  }, [rowReverse, startGridPosition]);
+    setStartTime(startCell.time);
+  }, [rowReverse, startCellNumber]);
 
+  // 終了時刻をセットする
   useEffect(() => {
-    if (endGridPosition === undefined) {
+    if (endCellNumber === undefined) {
       if (startTime === undefined) {
         return;
       }
@@ -50,17 +50,14 @@ export default function ReservationGridReservationAreaTime({
       return;
     }
 
-    const endCellValue =
-      boothCellValues.findCellValueByGridPosition(endGridPosition);
-    if (endCellValue === undefined) {
+    const endCell = boothCells.findBoothCellByCellNumber(endCellNumber);
+    if (endCell === undefined) {
       return;
     }
 
-    const endTime = rowReverse
-      ? endCellValue.time
-      : getNextTime(endCellValue.time);
+    const endTime = rowReverse ? endCell.time : getNextTime(endCell.time);
     setEndTime(endTime);
-  }, [rowReverse, startTime, endGridPosition]);
+  }, [rowReverse, startTime, endCellNumber]);
 
   if (startTime === undefined || endTime === undefined) {
     return null;
@@ -74,10 +71,4 @@ export default function ReservationGridReservationAreaTime({
       {dispStartTime} ~ {dispEndTime}
     </div>
   );
-}
-
-function getNextTime(time: string): string {
-  const timeNum = getTimeAsMinutes(time);
-  const nextTimeNum = timeNum + minReservationDuration;
-  return formatToTimeString(nextTimeNum);
 }

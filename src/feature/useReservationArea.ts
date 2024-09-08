@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { GridPosition } from "../component/CalendarSelector/ReservationGridReservationArea";
-import { useBoothCellValues } from "../model/BoothCellValues";
-import { minReservationDuration } from "../component/CalendarSelector/CalendarSelector";
+import { useBoothCells } from "../model/BoothCells";
 import { submitBookingForm } from "./bookingFrom";
+import { CellNumber } from "../model/CellNumber";
+import { maxReserveDuration, minReservationDuration } from "./neighborWork";
 
-const maxReserveDuration = 120;
-
+// 最大で選択可能なセルの数 (4個)
 // before initialization エラーが発生するので関数で呼ぶ
 function maxReserveCellCount(): number {
   return maxReserveDuration / minReservationDuration;
@@ -14,74 +13,79 @@ function maxReserveCellCount(): number {
 export function useReservationArea() {
   const [reverse, setReverse] = useState(false);
 
-  const [startRAreaPosition, setStartRAreaPosition] = useState<
-    GridPosition | undefined
+  // ドラッグして表示する予約エリアのセルを管理
+  const [startRAreaCellNumber, setStartRAreaCellNumber] = useState<
+    CellNumber | undefined
   >(undefined);
-  const [endRAreaPosition, setEndRAreaPosition] = useState<
-    GridPosition | undefined
+  const [endRAreaCellNumber, setEndRAreaCellNumber] = useState<
+    CellNumber | undefined
   >(undefined);
 
-  const { boothCellValues } = useBoothCellValues();
+  const { boothCells } = useBoothCells();
 
-  function handleTableCellDragging(rowNum: number, colNum: number) {
+  // セルをドラッグしたら、開始セルをセットする
+  function handleTableCellDragging(row: number, col: number) {
     // 最初のドラッグ要素であれば、そのまま値をセットする
-    if (startRAreaPosition === undefined) {
-      setStartRAreaPosition({ rowNum, colNum });
+    if (startRAreaCellNumber === undefined) {
+      setStartRAreaCellNumber({ row, col });
       return;
     }
 
-    const reverse = startRAreaPosition.rowNum > rowNum;
+    const reverse = startRAreaCellNumber.row > row;
     setReverse(reverse);
 
     // 既にドラッグ済みの要素と異なる列にはウィンドウを広げない
-    if (startRAreaPosition.colNum !== colNum) {
+    if (startRAreaCellNumber.col !== col) {
       return;
     }
     // 最大予約可能数を選択済みであれば、それ以上はウィンドウを広げない
-    const cellCount = Math.abs(startRAreaPosition.rowNum - rowNum) + 1;
+    const cellCount = Math.abs(startRAreaCellNumber.row - row) + 1;
     if (cellCount > maxReserveCellCount()) {
       return;
     }
 
-    setEndRAreaPosition({ rowNum, colNum });
+    setEndRAreaCellNumber({ row, col });
   }
 
+  // セルのドラッグが終了したら、予約フォームをサブミットする
   async function handleTableCellDragEnd() {
-    if (startRAreaPosition === undefined || endRAreaPosition === undefined) {
+    if (
+      startRAreaCellNumber === undefined ||
+      endRAreaCellNumber === undefined
+    ) {
       return;
     }
 
-    const position = reverse ? endRAreaPosition : startRAreaPosition;
-    const cellValue = boothCellValues.findCellValueByGridPosition(position);
-    if (cellValue?.reservationUrl === undefined) {
+    const cellNumber = reverse ? endRAreaCellNumber : startRAreaCellNumber;
+    const cell = boothCells.findBoothCellByCellNumber(cellNumber);
+    if (cell?.reservationUrl === undefined) {
       return;
     }
 
-    const rowDiff = Math.abs(
-      startRAreaPosition.rowNum - endRAreaPosition.rowNum,
-    );
+    const rowDiff = Math.abs(startRAreaCellNumber.row - endRAreaCellNumber.row);
     const cellCount = rowDiff + 1;
     const duration = cellCount * minReservationDuration;
 
-    await submitBookingForm(cellValue.reservationUrl, duration);
+    await submitBookingForm(cell.reservationUrl, duration);
   }
 
-  async function handleTableCellClick(rowNum: number, colNum: number) {
-    const cellValue = boothCellValues.findCellValueByGridPosition({
-      rowNum,
-      colNum,
+  // セルをドラッグではなくクリックしたら、予約フォームをサブミットする
+  async function handleTableCellClick(row: number, col: number) {
+    const cell = boothCells.findBoothCellByCellNumber({
+      row,
+      col,
     });
-    if (cellValue?.reservationUrl === undefined) {
+    if (cell?.reservationUrl === undefined) {
       return;
     }
 
-    await submitBookingForm(cellValue.reservationUrl, minReservationDuration);
+    await submitBookingForm(cell.reservationUrl, minReservationDuration);
   }
 
   return {
     reverse,
-    startRAreaPosition,
-    endRAreaPosition,
+    startRAreaCellNumber,
+    endRAreaCellNumber,
     handleTableCellDragging,
     handleTableCellDragEnd,
     handleTableCellClick,

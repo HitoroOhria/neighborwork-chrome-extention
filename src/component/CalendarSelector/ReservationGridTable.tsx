@@ -17,6 +17,7 @@ export default function ReservationGridTable({
   onDragEnd,
   onClick,
 }: ReservationGridTableProps) {
+  // 行 x 列 でセルを作成する
   return Array(row)
     .fill(null)
     .map((_, rowIdx) =>
@@ -24,8 +25,9 @@ export default function ReservationGridTable({
         .fill(null)
         .map((_, colIdx) => (
           <ReservationGridTableCell
-            rowNum={rowIdx + 1}
-            colNum={colIdx + 1}
+            key={`${rowIdx}-${colIdx}`}
+            row={rowIdx + 1}
+            col={colIdx + 1}
             onDragStart={onDragStart}
             onDragOver={onDragOver}
             onDragEnd={onDragEnd}

@@ -16,8 +16,8 @@ type ReservationProps = {
 export default function ReservationArea({ row, col }: ReservationProps) {
   const {
     reverse,
-    startRAreaPosition,
-    endRAreaPosition,
+    startRAreaCellNumber,
+    endRAreaCellNumber,
     handleTableCellDragging,
     handleTableCellDragEnd,
     handleTableCellClick,
@@ -32,7 +32,9 @@ export default function ReservationArea({ row, col }: ReservationProps) {
           gridTemplateColumns: `repeat(${col}, 1fr)`,
         }}
       >
+        {/* テーブルの格子(枠線) */}
         <ReservationGridLattice row={row} col={col} />
+        {/* テーブルのセル */}
         <ReservationGridTable
           row={row}
           col={col}
@@ -41,16 +43,18 @@ export default function ReservationArea({ row, col }: ReservationProps) {
           onDragEnd={handleTableCellDragEnd}
           onClick={handleTableCellClick}
         />
+        {/* 予約済みのエリア表示 */}
         <ReservationGridReservedAreas />
+        {/* ドラッグした予約エリア */}
         <ReservationGridReservationArea
           variant={"reservation"}
-          startGridPosition={startRAreaPosition}
-          endGridPosition={endRAreaPosition}
+          startCellNumber={startRAreaCellNumber}
+          endCellNumber={endRAreaCellNumber}
           rowReverse={reverse}
         >
           <ReservationGridReservationAreaTime
-            startGridPosition={startRAreaPosition}
-            endGridPosition={endRAreaPosition}
+            startCellNumber={startRAreaCellNumber}
+            endCellNumber={endRAreaCellNumber}
             rowReverse={reverse}
           />
         </ReservationGridReservationArea>

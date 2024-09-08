@@ -1,32 +1,30 @@
 import ReservationGridReservationArea, {
   ReservationGridReservationAreaProps,
 } from "./ReservationGridReservationArea";
-import {
-  BoothCellValues,
-  useBoothCellValues,
-} from "../../model/BoothCellValues";
-import { Booth, useBooth } from "../../feature/booth";
+import { BoothCells, useBoothCells } from "../../model/BoothCells";
+import { Booth, useBooth } from "../../model/Booth";
 import { useMemo } from "react";
+import { getColNumberByBoothId } from "../../model/CellNumber";
 
 type ReservationGridReservedAreasProps = {};
 
 export default function ReservationGridReservedAreas({}: ReservationGridReservedAreasProps) {
-  const { allBoothIds, booths } = useBooth();
-  const { boothCellValues } = useBoothCellValues();
+  const { allBoothIds } = useBooth();
+  const { boothCells } = useBoothCells();
 
   const reservedAreasProps = useMemo(
-    () => getReservedAreasProps(allBoothIds, booths, boothCellValues),
-    [allBoothIds, booths, boothCellValues],
+    () => getReservedAreasProps(allBoothIds, boothCells),
+    [allBoothIds, boothCells],
   );
 
   return (
     <>
-      {reservedAreasProps.map((props, idx) => (
+      {reservedAreasProps.map((props) => (
         <ReservationGridReservationArea
-          key={`${JSON.stringify(props)}-${idx}`}
+          key={JSON.stringify(props)}
           variant="reserved"
-          startGridPosition={props.startGridPosition}
-          endGridPosition={props.endGridPosition}
+          startCellNumber={props.startCellNumber}
+          endCellNumber={props.endCellNumber}
         />
       ))}
     </>
@@ -42,16 +40,16 @@ type RowNum = {
 
 function getReservedAreasProps(
   allBoothIds: string[],
-  booths: Booth[],
-  boothCellValues: BoothCellValues,
+  boothCells: BoothCells,
 ): ReservedAreasProps[] {
   return allBoothIds.flatMap<ReservedAreasProps>((boothId) => {
-    const cellValues = boothCellValues.getCellValues(boothId);
-    const colNum = booths.findIndex((booth) => booth.id === boothId) + 1;
+    const cells = boothCells.getCells(boothId);
+    const colNum = getColNumberByBoothId(boothId);
 
+    // 時間が小さい順にセルを捜査していく
     const rowNums: RowNum[] = [];
-    for (let i = 0; i < cellValues.length; i++) {
-      const value = cellValues[i];
+    for (let i = 0; i < cells.length; i++) {
+      const value = cells[i];
       // セルが予約済みであれば、startRowNum を埋める
       if (value.reserved()) {
         const rowNum = rowNums.at(-1);
@@ -80,8 +78,8 @@ function getReservedAreasProps(
     }
 
     return rowNums.map((rowNum) => ({
-      startGridPosition: { rowNum: rowNum.start!, colNum },
-      endGridPosition: { rowNum: rowNum.end!, colNum },
+      startCellNumber: { row: rowNum.start!, col: colNum },
+      endCellNumber: { row: rowNum.end!, col: colNum },
     }));
   });
 }

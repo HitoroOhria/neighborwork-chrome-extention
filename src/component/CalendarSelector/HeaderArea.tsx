@@ -1,6 +1,6 @@
 import { areaName } from "./CalendarSelector";
 import { headerBorder, headerColStyle } from "../../feature/headerColStyle";
-import { Booth } from "../../feature/booth";
+import { Booth } from "../../model/Booth";
 
 type HeaderAreaProps = {
   booths: Booth[];
@@ -18,12 +18,15 @@ export default function HeaderArea({ booths }: HeaderAreaProps) {
       >
         {booths.map((booth, idx) => (
           <div
+            key={booth.name}
             style={{
               ...headerColStyle,
               border: undefined,
+              // コ の字でボーダーをセットして並べていく
               borderTop: headerBorder,
               borderRight: headerBorder,
               borderBottom: headerBorder,
+              // 1番目の要素のみ左のボーダーも表示する
               ...(idx === 0 ? { borderLeft: headerBorder } : {}),
               display: "flex",
               alignItems: "center",

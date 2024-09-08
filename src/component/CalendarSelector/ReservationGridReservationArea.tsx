@@ -1,56 +1,52 @@
 import { zIndex } from "../../feature/zIndex";
 import { boxStyle } from "../../feature/boxStyle";
 import { CSSProperties, ReactNode } from "react";
-
-export type GridPosition = {
-  rowNum: number;
-  colNum: number;
-};
+import { CellNumber } from "../../model/CellNumber";
 
 export type ReservationGridReservationAreaProps = {
   variant: "reserved" | "reservation";
-  startGridPosition: GridPosition | undefined;
-  endGridPosition: GridPosition | undefined;
+  startCellNumber: CellNumber | undefined;
+  endCellNumber: CellNumber | undefined;
   rowReverse?: boolean;
   children?: ReactNode;
 };
 
 export default function ReservationGridReservationArea({
   variant,
-  startGridPosition,
-  endGridPosition,
+  startCellNumber,
+  endCellNumber,
   rowReverse,
   children,
 }: ReservationGridReservationAreaProps) {
-  if (startGridPosition === undefined) {
+  if (startCellNumber === undefined) {
     return null;
   }
 
   const startGridRow = rowReverse
-    ? startGridPosition.rowNum + 1
-    : startGridPosition.rowNum;
+    ? startCellNumber.row + 1
+    : startCellNumber.row;
 
   const endGridRow = (function (): string | number {
-    if (endGridPosition === undefined) {
+    if (endCellNumber === undefined) {
       return "span 1";
     }
-    return endGridPosition.rowNum + (rowReverse ? 0 : 1);
+    return endCellNumber.row + (rowReverse ? 0 : 1);
   })();
 
   const endGridCol = (function (): string | number {
-    if (endGridPosition === undefined) {
+    if (endCellNumber === undefined) {
       return "span 1";
     }
-    return endGridPosition.colNum + 1;
+    return endCellNumber.col + 1;
   })();
 
   return (
     <div
       style={{
         ...variantStyle[variant],
-        zIndex: zIndex.reservationGridReservationWindow,
+        zIndex: zIndex.reservationGridReservationArea,
         gridRow: `${startGridRow} / ${endGridRow}`,
-        gridColumn: `${startGridPosition.colNum} / ${endGridCol}`,
+        gridColumn: `${startCellNumber.col} / ${endGridCol}`,
       }}
     >
       {children}

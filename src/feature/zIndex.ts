@@ -1,4 +1,5 @@
+// zIndex を管理する
 export const zIndex = {
-  reservationGridReservationWindow: -1,
+  reservationGridReservationArea: -1,
   reservationGridLattice: -2,
 };

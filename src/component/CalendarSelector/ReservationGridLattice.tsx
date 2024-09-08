@@ -19,6 +19,7 @@ export default function ReservationGridLattice({
         .map((_, colIdx) => (
           <div
             style={{
+              // 右・下のボーダーを表示し、並べていく
               borderRight: latticeBorder,
               borderBottom: rowIdx % 2 === 0 ? undefined : latticeBorder,
               zIndex: zIndex.reservationGridLattice,

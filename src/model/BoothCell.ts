@@ -1,9 +1,11 @@
+import { CellNumber } from "./CellNumber";
+
 const reservableChar = "○";
 const reservedChar = "×";
 const notAvailableChar = "－";
 
-// テーブルの時間帯ごとのブースのセル
-export class BoothCellValue {
+// テーブルのブースのセル
+export class BoothCell {
   // ブースのセルの時間 (e.g. '10:30')
   time: string;
   // ブースのセルの予約可能フラグ ('○' | '－')
