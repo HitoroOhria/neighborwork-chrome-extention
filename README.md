@@ -33,3 +33,12 @@ npm run chromeDashboard
 ```shell
 npm run chromeWebStore
 ```
+
+### ディレクトリ構成
+
+| ディレクトリ        | 内容                                      |
+|---------------|-----------------------------------------|
+| `/docs`       | プライバリーポリシーの GitHub Pages のソース           |
+| `/entrypoint` | ビルドされたファイルのアウトプット先                      |
+| `/src`        | Chrome 拡張機能のソースコード                      |
+| `/static`     | 静的ファイル。`manifest.json` や css ファイル、ロゴなど。 |
