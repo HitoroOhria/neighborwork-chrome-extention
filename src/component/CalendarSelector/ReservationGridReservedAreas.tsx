@@ -49,9 +49,9 @@ function getReservedAreasProps(
     // 時間が小さい順にセルを捜査していく
     const rowNums: RowNum[] = [];
     for (let i = 0; i < cells.length; i++) {
-      const value = cells[i];
+      const cell = cells[i];
       // セルが予約済みであれば、startRowNum を埋める
-      if (value.reserved()) {
+      if (cell.reserved()) {
         const rowNum = rowNums.at(-1);
         if (rowNum === undefined) {
           rowNums.push({ start: i + 1, end: undefined });
@@ -75,6 +75,15 @@ function getReservedAreasProps(
       }
 
       rowNum.end = i;
+    }
+
+    // もし、最後のセル (23:30 ~ 24:00) が予約済みの場合、上の操作では end = undefined で終わってしまう
+    // その場合はここで end をセットする
+    if (cells.at(-1)?.reserved()) {
+      const lastRowNum = rowNums.at(-1);
+      if (lastRowNum !== undefined) {
+        lastRowNum.end = cells.length;
+      }
     }
 
     return rowNums.map((rowNum) => ({

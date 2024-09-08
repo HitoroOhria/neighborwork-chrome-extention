@@ -22,18 +22,18 @@ export default function ReservationGridReservationArea({
     return null;
   }
 
-  const startGridRow = rowReverse
+  const startGridRow: CSSProperties["gridRow"] = rowReverse
     ? startCellNumber.row + 1
     : startCellNumber.row;
 
-  const endGridRow = (function (): string | number {
+  const endGridRow = (function (): CSSProperties["gridRow"] {
     if (endCellNumber === undefined) {
       return "span 1";
     }
     return endCellNumber.row + (rowReverse ? 0 : 1);
   })();
 
-  const endGridCol = (function (): string | number {
+  const endGridCol = (function (): CSSProperties["gridRow"] {
     if (endCellNumber === undefined) {
       return "span 1";
     }
@@ -43,7 +43,7 @@ export default function ReservationGridReservationArea({
   return (
     <div
       style={{
-        ...variantStyle[variant],
+        ...variantStyle(startCellNumber, endCellNumber)[variant],
         zIndex: zIndex.reservationGridReservationArea,
         gridRow: `${startGridRow} / ${endGridRow}`,
         gridColumn: `${startCellNumber.col} / ${endGridCol}`,
@@ -54,20 +54,42 @@ export default function ReservationGridReservationArea({
   );
 }
 
-const variantStyle: Record<
-  ReservationGridReservationAreaProps["variant"],
-  CSSProperties
-> = {
-  reserved: {
-    margin: "3px 4px",
-    border: "2px solid #F0E68C",
-    borderRadius: boxStyle.borderRadius,
-    background:
-      "repeating-linear-gradient(-45deg, #F0E68C, #F0E68C 1.5px, #fff 0, #fff 20px)",
-  },
-  reservation: {
-    backgroundColor: "#B2FFFF",
-    opacity: 0.8,
-    ...boxStyle,
-  },
-};
+function variantStyle(
+  startCellNumber: CellNumber,
+  endCellNumber: CellNumber | undefined,
+): Record<ReservationGridReservationAreaProps["variant"], CSSProperties> {
+  const oneCell =
+    endCellNumber === undefined || startCellNumber.row === endCellNumber.row;
+  const startUpperCell = startCellNumber.row % 2 === 1;
+
+  const reservedMargin = (function (): string {
+    // ReservationGridLattice.tsx で右・下にボーダーを表示して敷き詰めているため、右・下のマージンは 1px 多くする
+    const baseMargin = { top: "3px", right: "5px", bottom: "4px", left: "4px" };
+
+    // 1セルは小さくなりすぎるので、上下どちらかのマージンを削る
+    if (oneCell) {
+      if (startUpperCell) {
+        baseMargin.bottom = "0px";
+      } else {
+        baseMargin.top = "0px";
+      }
+    }
+
+    return `${baseMargin.top} ${baseMargin.right} ${baseMargin.bottom} ${baseMargin.left}`;
+  })();
+
+  return {
+    reserved: {
+      margin: reservedMargin,
+      border: "2px solid #F0E68C",
+      borderRadius: boxStyle.borderRadius,
+      background:
+        "repeating-linear-gradient(-45deg, #F0E68C, #F0E68C 1.5px, #fff 0, #fff 20px)",
+    },
+    reservation: {
+      backgroundColor: "#B2FFFF",
+      opacity: 0.8,
+      ...boxStyle,
+    },
+  };
+}
