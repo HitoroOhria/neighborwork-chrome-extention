@@ -12,7 +12,6 @@
     "service_worker": "icon_clicked.js"
   },
   "action": {},
-  "permissions": ["tabs"],
   "content_scripts": [
     {
       "matches": ["https://sycl.neighborwork.jp/reserve_booth/*"],
