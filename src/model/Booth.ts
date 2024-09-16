@@ -24,3 +24,12 @@ export const allBoothIds = booths.map((booth) => booth.id);
 export function useBooth() {
   return { booths, allBoothIds };
 }
+
+export function getBoothName(boothId: string): string {
+  const booth = booths.find((booth) => booth.id === boothId);
+  if (booth === undefined) {
+    throw new Error(`booth is not found. ${boothId}`);
+  }
+
+  return booth.name;
+}

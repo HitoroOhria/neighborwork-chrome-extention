@@ -3,6 +3,8 @@ import { useBoothCells } from "../model/BoothCells";
 import { submitBookingForm } from "./bookingFrom";
 import { CellNumber } from "../model/CellNumber";
 import { maxReserveDuration, minReservationDuration } from "./neighborWork";
+import { openGoogleCalendarRegistration } from "./googleCalendar";
+import { getBoothName } from "../model/Booth";
 
 // 最大で選択可能なセルの数 (4個)
 // before initialization エラーが発生するので関数で呼ぶ
@@ -53,19 +55,27 @@ export function useReservationArea() {
       startRAreaCellNumber === undefined ||
       endRAreaCellNumber === undefined
     ) {
-      return;
+      throw new Error(
+        `start or end cell number not found. ${{ startRAreaCellNumber, endRAreaCellNumber }}`,
+      );
     }
 
     const cellNumber = reverse ? endRAreaCellNumber : startRAreaCellNumber;
     const cell = boothCells.findBoothCellByCellNumber(cellNumber);
-    if (cell?.reservationUrl === undefined) {
-      return;
+    if (cell === undefined) {
+      throw new Error(`cell not found. ${cellNumber}`);
+    }
+    if (!cell.canReserve()) {
+      throw new Error(`cell not reservable. ${cell}`);
     }
 
     const rowDiff = Math.abs(startRAreaCellNumber.row - endRAreaCellNumber.row);
     const cellCount = rowDiff + 1;
     const duration = cellCount * minReservationDuration;
 
+    const boothName = getBoothName(cell.boothId);
+
+    openGoogleCalendarRegistration(boothName, cell.nwDate, duration);
     await submitBookingForm(cell.reservationUrl, duration);
   }
 
@@ -75,10 +85,20 @@ export function useReservationArea() {
       row,
       col,
     });
-    if (cell?.reservationUrl === undefined) {
-      return;
+    if (cell === undefined) {
+      throw new Error(`cell not found. ${{ row, col }}`);
+    }
+    if (!cell.canReserve()) {
+      throw new Error(`cell not reservable. ${cell}`);
     }
 
+    const boothName = getBoothName(cell.boothId);
+
+    openGoogleCalendarRegistration(
+      boothName,
+      cell.nwDate,
+      minReservationDuration,
+    );
     await submitBookingForm(cell.reservationUrl, minReservationDuration);
   }
 

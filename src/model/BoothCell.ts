@@ -38,7 +38,7 @@ export class BoothCell {
   }
 
   get timeText(): string {
-    return `${this.nwDate.hourText}:${this.nwDate.minutesText}`;
+    return `${this.nwDate.hoursText}:${this.nwDate.minutesText}`;
   }
 
   // 予約 URL
