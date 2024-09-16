@@ -22,3 +22,7 @@ export function makeOrigTableHidden() {
 export function makeOrigTableDisplay() {
   origTableElement.style.display = "table";
 }
+
+export function useTableCaption(): HTMLTableCaptionElement {
+  return tableCaptionElement;
+}
