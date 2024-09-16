@@ -1,6 +1,6 @@
 import { BoothCell } from "./BoothCell";
 import { parseTableToBoothCellData } from "../feature/parseTableToBoothCell";
-import { origTableElement } from "./OrigTable";
+import { origTableElement, tableCaptionElement } from "./OrigTable";
 import { CellNumber, getBoothIdByCellNumber } from "./CellNumber";
 
 export type BoothCellsData = { [boothId: string]: BoothCell[] };
@@ -19,7 +19,9 @@ export class BoothCells {
     const cells = this.data[boothId];
 
     // 最小の時間からソートされているはずなので、ソート処理はスキップする
-    return cells.filter((cell) => cell.canReserve()).map((cell) => cell.time);
+    return cells
+      .filter((cell) => cell.canReserve())
+      .map((cell) => cell.timeText);
   }
 
   // ブースの予約可能な時間帯のうち、一番小さいものの予約 URL を取得する
@@ -40,7 +42,7 @@ export class BoothCells {
     time: string;
   }): BoothCell | undefined {
     const cells = this.data[arg.boothId];
-    return cells.find((cell) => cell.time === arg.time);
+    return cells.find((cell) => cell.timeText === arg.time);
   }
 
   public findBoothCellByCellNumber({
@@ -61,7 +63,9 @@ export class BoothCells {
   }
 }
 
-const boothCells = new BoothCells(parseTableToBoothCellData(origTableElement));
+const boothCells = new BoothCells(
+  parseTableToBoothCellData(origTableElement, tableCaptionElement),
+);
 
 export function useBoothCells() {
   return { boothCells };

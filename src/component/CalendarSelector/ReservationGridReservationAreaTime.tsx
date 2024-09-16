@@ -30,12 +30,12 @@ export default function ReservationGridReservationAreaTime({
       return;
     }
     if (rowReverse) {
-      const startTime = getNextTime(startCell.time);
+      const startTime = getNextTime(startCell.timeText);
       setStartTime(startTime);
       return;
     }
 
-    setStartTime(startCell.time);
+    setStartTime(startCell.timeText);
   }, [rowReverse, startCellNumber]);
 
   // 終了時刻をセットする
@@ -55,7 +55,9 @@ export default function ReservationGridReservationAreaTime({
       return;
     }
 
-    const endTime = rowReverse ? endCell.time : getNextTime(endCell.time);
+    const endTime = rowReverse
+      ? endCell.timeText
+      : getNextTime(endCell.timeText);
     setEndTime(endTime);
   }, [rowReverse, startTime, endCellNumber]);
 
