@@ -15,6 +15,7 @@ function maxReserveCellCount(): number {
 export function useReservationArea() {
   const [reverse, setReverse] = useState(false);
 
+  // TODO BoothCell に書き換える
   // ドラッグして表示する予約エリアのセルを管理
   const [startRAreaCellNumber, setStartRAreaCellNumber] = useState<
     CellNumber | undefined
@@ -43,6 +44,15 @@ export function useReservationArea() {
     // 最大予約可能数を選択済みであれば、それ以上はウィンドウを広げない
     const cellCount = Math.abs(startRAreaCellNumber.row - row) + 1;
     if (cellCount > maxReserveCellCount()) {
+      return;
+    }
+
+    const nextCell = boothCells.findBoothCellByCellNumber({ row, col });
+    if (nextCell === undefined) {
+      return;
+    }
+    // 次のセルが予約可能じゃなければ、ウィンドウを広げない
+    if (!nextCell.canReserve()) {
       return;
     }
 
