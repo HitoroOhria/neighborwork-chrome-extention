@@ -11,11 +11,11 @@ export type Booth = {
 };
 
 export const booths: Booth[] = [
-  { id: boothPId, name: "Booth P" },
-  { id: boothAId, name: "Booth A" },
-  { id: boothRId, name: "Booth R" },
-  { id: boothTId, name: "Booth T" },
-  { id: boothYId, name: "Booth Y" },
+  { id: boothPId, name: "Booth 1" },
+  { id: boothAId, name: "Booth 2" },
+  { id: boothRId, name: "Booth 3" },
+  { id: boothTId, name: "Booth 4" },
+  { id: boothYId, name: "Booth 5" },
   { id: boothSunId, name: "Booth Sun" },
 ];
 
