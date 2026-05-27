@@ -1,11 +1,11 @@
 import {
   allBoothIds,
-  boothAId,
-  boothPId,
-  boothRId,
+  booth1Id,
+  booth2Id,
+  booth3Id,
+  booth4Id,
+  booth5Id,
   boothSunId,
-  boothTId,
-  boothYId,
 } from "../model/Booth";
 import { BoothCell } from "../model/BoothCell";
 import { BoothCellsData } from "../model/BoothCells";
@@ -16,11 +16,11 @@ type CellIndexPerBooth = Record<string, CellIndex>;
 
 // ブースごとのセルのインデックス
 const cellIndexPerBooth: CellIndexPerBooth = {
-  [boothPId]: { time: 0, reservableFlag: 1 },
-  [boothAId]: { time: 2, reservableFlag: 3 },
-  [boothRId]: { time: 4, reservableFlag: 5 },
-  [boothTId]: { time: 6, reservableFlag: 7 },
-  [boothYId]: { time: 8, reservableFlag: 9 },
+  [booth1Id]: { time: 0, reservableFlag: 1 },
+  [booth2Id]: { time: 2, reservableFlag: 3 },
+  [booth3Id]: { time: 4, reservableFlag: 5 },
+  [booth4Id]: { time: 6, reservableFlag: 7 },
+  [booth5Id]: { time: 8, reservableFlag: 9 },
   [boothSunId]: { time: 10, reservableFlag: 11 },
 };
 

@@ -1,8 +1,8 @@
-export const boothPId = "473";
-export const boothAId = "474";
-export const boothRId = "475";
-export const boothTId = "477";
-export const boothYId = "478";
+export const booth1Id = "473";
+export const booth2Id = "474";
+export const booth3Id = "475";
+export const booth4Id = "477";
+export const booth5Id = "478";
 export const boothSunId = "1409";
 
 export type Booth = {
@@ -11,11 +11,11 @@ export type Booth = {
 };
 
 export const booths: Booth[] = [
-  { id: boothPId, name: "Booth 1" },
-  { id: boothAId, name: "Booth 2" },
-  { id: boothRId, name: "Booth 3" },
-  { id: boothTId, name: "Booth 4" },
-  { id: boothYId, name: "Booth 5" },
+  { id: booth1Id, name: "Booth 1" },
+  { id: booth2Id, name: "Booth 2" },
+  { id: booth3Id, name: "Booth 3" },
+  { id: booth4Id, name: "Booth 4" },
+  { id: booth5Id, name: "Booth 5" },
   { id: boothSunId, name: "Booth Sun" },
 ];
 
