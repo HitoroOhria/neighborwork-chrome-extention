@@ -3,7 +3,7 @@
 - [NEIGHBOR WORK Time Selector (Chrome Web Store)](https://chromewebstore.google.com/detail/bfibpmjaailjebfjgdgfapdpenglolgb)
 - [NEIGHBOR WORK Time Selector (Chrome Developer Dashboard)](https://chrome.google.com/webstore/devconsole/f950e9e0-a986-4fd0-91b3-cbf770aaf390/bfibpmjaailjebfjgdgfapdpenglolgb/edit)
 
-# 開発
+## 開発
 
 ### Chrome 拡張機能のビルド
 
