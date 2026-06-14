@@ -1,18 +1,11 @@
-import { appendChildToMixAnchor, makeOrigTableHidden } from "./model/OrigTable";
-import { createRoot } from "react-dom/client";
-import CalendarSelector from "./component/CalendarSelector/CalendarSelector";
+import { init as reserveBoothInit } from "./page/reserve_booth/index.";
 
 window.onload = function () {
-  makeOrigTableHidden();
-  insertReactDom();
+  switch (location.pathname) {
+    case "/reserve_booth/":
+      reserveBoothInit();
+      break;
+    default:
+      console.warn("not match path of NEIGHBOR WORK Time Selector");
+  }
 };
-
-function insertReactDom() {
-  const app = document.createElement("div");
-  app.innerHTML = '<div id="app"></div>';
-  appendChildToMixAnchor(app);
-
-  const root = createRoot(document.getElementById("app") as HTMLElement);
-  // root.render(ReservationTBody({ booths }));
-  root.render(CalendarSelector());
-}
