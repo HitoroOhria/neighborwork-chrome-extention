@@ -14,7 +14,10 @@
   "action": {},
   "content_scripts": [
     {
-      "matches": ["https://sycl.neighborwork.jp/reserve_booth/*"],
+      "matches": [
+        "https://sycl.neighborwork.jp/reserve_booth/*",
+        "https://sycl.neighborwork.jp/booking-form/"
+      ],
       "js": ["content.js"],
       "css": [
         "time-select.css",
